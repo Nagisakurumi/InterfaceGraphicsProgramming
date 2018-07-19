@@ -1,0 +1,26 @@
+﻿<UserControl x:Class="TkScripts.ScriptLayout.StackingLayout.StackInput"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TkScripts.ScriptLayout.StackingLayout"
+             xmlns:paramter="clr-namespace:TkScripts.ScriptLayout.BezierLinkLayout.ScriptIParameterLayout"
+             mc:Ignorable="d" 
+             d:DesignHeight="100" d:DesignWidth="300">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <CheckBox Content="是否采用属性" VerticalAlignment="Center" Name="isopen" Unchecked="isopen_Unchecked" VerticalContentAlignment="Center"></CheckBox>
+            <ComboBox Grid.Column="1" VerticalAlignment="Center" VerticalContentAlignment="Center" SelectedItem="{Binding Path=LinkIProperty}"
+                      HorizontalContentAlignment="Center" Name="propertyCombox" IsEnabled="{Binding ElementName=isopen,Path=IsChecked}"></ComboBox>
+        </Grid>
+        <paramter:InputParaItemLayout x:Name="input" Grid.Column="1"></paramter:InputParaItemLayout>
+    </Grid>
+</UserControl>

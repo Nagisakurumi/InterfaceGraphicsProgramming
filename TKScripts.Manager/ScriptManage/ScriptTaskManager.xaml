@@ -1,0 +1,67 @@
+﻿<UserControl x:Class="TKScripts.Manager.ScriptManage.ScriptTaskManager"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TKScripts.Manager.ScriptManage"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100"></ColumnDefinition>
+            <ColumnDefinition Width="2"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Menu Grid.ColumnSpan="3" Grid.Column="0">
+            
+        </Menu>
+        <Grid Grid.Column="0" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="2"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <DockPanel Grid.Row="0">
+                <TextBlock DockPanel.Dock="Top" Text="脚本列表" HorizontalAlignment="Center"
+                           VerticalAlignment="Center" Foreground="White"></TextBlock>
+                <ListBox DockPanel.Dock="Bottom">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </DockPanel>
+            <GridSplitter Grid.Row="1"></GridSplitter>
+            <DockPanel Grid.Row="2">
+                <TextBlock DockPanel.Dock="Top" Text="任务列表" HorizontalAlignment="Center"
+                           VerticalAlignment="Center" Foreground="White"></TextBlock>
+                <ListBox DockPanel.Dock="Bottom">
+
+                </ListBox>
+            </DockPanel>
+        </Grid>
+        <GridSplitter Grid.Column="1" Grid.Row="1"></GridSplitter>
+        <Grid Grid.Column="2" Grid.Row="1">
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="2"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <ListBox Grid.Row="0">
+
+                </ListBox>
+                <GridSplitter Grid.Row="1"></GridSplitter>
+                <ListBox Grid.Row="2">
+
+                </ListBox>
+            </Grid>
+        </Grid>
+    </Grid>
+    
+</UserControl>

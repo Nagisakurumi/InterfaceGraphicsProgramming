@@ -1,0 +1,22 @@
+﻿<Window x:Class="TScriptTestApp.MainLayout2"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TScriptTestApp"
+        xmlns:manager="clr-namespace:TKScripts.Manager.ScriptManage;assembly=TKScripts.Manager"
+        mc:Ignorable="d"
+        Title="MainLayout2" Height="432.302" Width="821.223">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="32"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <StackPanel>
+            <Button Content="运行" Click="Button_Click"></Button>
+        </StackPanel>
+        <manager:ScriptIntegrationForOne x:Name="scriptContent" Grid.Row="1">
+
+        </manager:ScriptIntegrationForOne>
+    </Grid>
+</Window>

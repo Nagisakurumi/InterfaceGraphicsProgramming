@@ -1,0 +1,52 @@
+﻿<UserControl x:Class="TKScripts.Manager.PropertyItControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TKScripts.Manager"
+             xmlns:scriptParamter="clr-namespace:TkScripts.ScriptLayout;assembly=TkScripts"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <WrapPanel Grid.Row="0">
+            <Border Background="White" MouseDown="CreateInt_MouseDown">
+                <TextBlock Text="+添加整形变量" Margin="5"></TextBlock>
+            </Border>
+            <Border Background="White" MouseDown="CreateFloat_MouseDown">
+                <TextBlock Text="+添加浮点型变量" Margin="5"></TextBlock>
+            </Border>
+            <Border Background="White" MouseDown="CreateBool_MouseDown">
+                <TextBlock Text="+添加布尔变量" Margin="5"></TextBlock>
+            </Border>
+            <Border Background="White" MouseDown="CreateDate_MouseDown">
+                <TextBlock Text="+添加时间变量" Margin="5"></TextBlock>
+            </Border>
+            <Border Background="White" MouseDown="CreateObject_MouseDown">
+                <TextBlock Text="+添加Object变量" Margin="5"></TextBlock>
+            </Border>
+            <Border Background="White" MouseDown="CreatePoint_MouseDown">
+            <TextBlock Text="+添加Point变量" Margin="5"></TextBlock>
+            </Border>
+            <Border Background="White" MouseDown="Remove_MouseDown">
+                <TextBlock Text="-删除变量" Margin="5"></TextBlock>
+            </Border>
+        </WrapPanel>
+        <ListBox Grid.Row="1" Background="#00000000" DockPanel.Dock="Bottom" Margin="0, 4, 0, 0" Name="propertysList">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <scriptParamter:PropertyBox Margin="1, 5, 1, 1" HorizontalAlignment="Stretch"></scriptParamter:PropertyBox>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</UserControl>

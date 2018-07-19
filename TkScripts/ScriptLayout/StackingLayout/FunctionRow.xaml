@@ -1,0 +1,44 @@
+﻿<interface:IFunctionBox x:Class="TkScripts.ScriptLayout.StackingLayout.FunctionRow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:interface="clr-namespace:TkScripts.Interface"
+             xmlns:th="clr-namespace:TkScripts.ScriptLayout.StackingLayout"
+             mc:Ignorable="d" x:Name="main" Background="#00000000"
+             >
+    <interface:IFunctionBox.Resources>
+        <th:VisiableAndIsHasStopPoint x:Key="haspointchange"></th:VisiableAndIsHasStopPoint>
+    </interface:IFunctionBox.Resources>
+    <Border BorderThickness="1" BorderBrush="{Binding Path=BoxBrush}" CornerRadius="5"
+            >
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Border ToolTip="{Binding Path=TipText}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="16"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="32"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Image Width="16" Name="img" Height="16" VerticalAlignment="Center" HorizontalAlignment="Center" Source="{Binding Path=LogoPath}" Stretch="Fill" />
+                    <TextBlock DockPanel.Dock="Right" Grid.Column="1" Foreground="{Binding Path=ForgeBrush}" Text="{Binding Path=Name}" FontSize="13" HorizontalAlignment="Center"  VerticalAlignment="Center"></TextBlock>
+                    <Border Width="16" Height="16" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" Background="Red" Visibility="{Binding Path=IsHasBreakPoint,Converter={StaticResource haspointchange}}"></Border>
+                </Grid>
+            </Border>
+            <!--{Binding Path=ForgeBrush}-->
+            <!--<Border Margin="10, 0, 10, 0" BorderThickness="2" CornerRadius="1" BorderBrush="White" Grid.Row="1"></Border>
+
+            <DockPanel Grid.Row="2">
+                <StackPanel Orientation="Vertical" DockPanel.Dock="Left" HorizontalAlignment="Left" Margin="4, 2, 2, 2" Name="left">
+                    
+                </StackPanel>
+                <StackPanel Orientation="Vertical" DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="2, 2, 4, 2" Name="right">
+
+                </StackPanel>
+            </DockPanel>-->
+        </Grid>
+    </Border>
+</interface:IFunctionBox>

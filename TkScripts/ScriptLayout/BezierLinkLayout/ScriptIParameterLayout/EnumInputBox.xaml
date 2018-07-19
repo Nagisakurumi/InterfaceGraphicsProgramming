@@ -1,0 +1,13 @@
+﻿<local:MLInputBox x:Class="TkScripts.ScriptLayout.BezierLinkLayout.ScriptIParameterLayout.EnumInputBox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TkScripts.ScriptLayout.BezierLinkLayout.ScriptIParameterLayout"
+             mc:Ignorable="d" 
+             >
+    <Border BorderThickness="1" CornerRadius="4" BorderBrush="White">
+        <ComboBox HorizontalContentAlignment="Center" VerticalContentAlignment="Center" ItemsSource="{Binding Path=EnumDatas}"
+                  Background="#FFC5C1C1" Foreground="Black" Name="value" SelectedItem="{Binding Path=Value,Mode=TwoWay}"></ComboBox>
+    </Border>
+</local:MLInputBox>
