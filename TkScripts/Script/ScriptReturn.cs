@@ -33,6 +33,7 @@ namespace TkScripts.Script
         /// <summary>
         /// 日志
         /// </summary>
+        [JsonIgnore]
         public WriteStreamCallBack WriteStream = null;
         /// <summary>
         /// 释放内存
@@ -155,10 +156,25 @@ namespace TkScripts.Script
     /// </summary>
     public struct DataContext
     {
+        /// <summary>
+        /// 参数名称
+        /// </summary>
         public string Name;
+        /// <summary>
+        /// 参数类型
+        /// </summary>
         public string Type;
+        /// <summary>
+        /// 参数默认值
+        /// </summary>
         public object DefultValue;
+        /// <summary>
+        /// 参数枚举列表(参数的可选值)
+        /// </summary>
         public List<string> EnumDatas;
+        /// <summary>
+        /// 参数的提示文字
+        /// </summary>
         public string TipText;
         /// <summary>
         /// 构造函数
@@ -181,14 +197,6 @@ namespace TkScripts.Script
     [AttributeUsage(AttributeTargets.Method)]
     public class ScriptMethAttribute : Attribute
     {
-        /// <summary>
-        /// 输入数据
-        /// </summary>
-        private List<DataContext> inputData = new List<DataContext>();
-        /// <summary>
-        /// 输出数据
-        /// </summary>
-        private List<DataContext> outputData = new List<DataContext>();
         /// <summary>
         /// 所有类型
         /// </summary>
@@ -309,23 +317,13 @@ namespace TkScripts.Script
         /// <summary>
         /// 输入参数
         /// </summary>
-        public List<DataContext> InputData
-        {
-            get
-            {
-                return inputData;
-            }
-        }
+        public List<DataContext> InputData { get; } = new List<DataContext>();
+
         /// <summary>
         /// 输出参数
         /// </summary>
-        public List<DataContext> OutputData
-        {
-            get
-            {
-                return outputData;
-            }
-        }
+        public List<DataContext> OutputData { get; } = new List<DataContext>();
+
         /// <summary>
         /// 获取枚举列表
         /// </summary>

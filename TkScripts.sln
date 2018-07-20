@@ -1,13 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TkScripts", "TkScripts\TkScripts.csproj", "{B6B2704A-CF50-4563-ADC1-65B018303E40}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TKScripts.Manager", "TKScripts.Manager\TKScripts.Manager.csproj", "{D218E160-C6A8-4B54-9CC1-E1EB78199150}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TScriptTestApp", "TScriptTestApp\TScriptTestApp.csproj", "{B354647A-F6E3-4A8B-B188-E541F297C325}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TKScriptsServer", "TKScriptsServer\TKScriptsServer.csproj", "{26A7106D-C1F4-405C-BA89-F81053D35ECF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerTestApp", "ServerTestApp\ServerTestApp.csproj", "{4FEE7537-B7C6-4CAE-A41C-158393FB6D50}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,8 +45,27 @@ Global
 		{B354647A-F6E3-4A8B-B188-E541F297C325}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B354647A-F6E3-4A8B-B188-E541F297C325}.Release|x64.ActiveCfg = Release|x64
 		{B354647A-F6E3-4A8B-B188-E541F297C325}.Release|x64.Build.0 = Release|x64
+		{26A7106D-C1F4-405C-BA89-F81053D35ECF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26A7106D-C1F4-405C-BA89-F81053D35ECF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26A7106D-C1F4-405C-BA89-F81053D35ECF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{26A7106D-C1F4-405C-BA89-F81053D35ECF}.Debug|x64.Build.0 = Debug|Any CPU
+		{26A7106D-C1F4-405C-BA89-F81053D35ECF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26A7106D-C1F4-405C-BA89-F81053D35ECF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26A7106D-C1F4-405C-BA89-F81053D35ECF}.Release|x64.ActiveCfg = Release|Any CPU
+		{26A7106D-C1F4-405C-BA89-F81053D35ECF}.Release|x64.Build.0 = Release|Any CPU
+		{4FEE7537-B7C6-4CAE-A41C-158393FB6D50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4FEE7537-B7C6-4CAE-A41C-158393FB6D50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4FEE7537-B7C6-4CAE-A41C-158393FB6D50}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4FEE7537-B7C6-4CAE-A41C-158393FB6D50}.Debug|x64.Build.0 = Debug|Any CPU
+		{4FEE7537-B7C6-4CAE-A41C-158393FB6D50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4FEE7537-B7C6-4CAE-A41C-158393FB6D50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4FEE7537-B7C6-4CAE-A41C-158393FB6D50}.Release|x64.ActiveCfg = Release|Any CPU
+		{4FEE7537-B7C6-4CAE-A41C-158393FB6D50}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2D94C11D-84B5-4F20-AF07-01DE2FCC6FDD}
 	EndGlobalSection
 EndGlobal

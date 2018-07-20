@@ -34,9 +34,6 @@ namespace TKScripts.Manager.ScriptManage.ManagerPlugin
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
-
-
-
         /// <summary>
         /// 改变通知
         /// </summary>
