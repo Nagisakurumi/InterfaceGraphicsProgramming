@@ -4,8 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TKScripts.Manager.ScriptManage"
+             xmlns:manager="clr-namespace:TKScripts.Manager"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" Width="520">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100"></ColumnDefinition>
@@ -16,9 +17,12 @@
             <RowDefinition Height="35"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <Menu Grid.ColumnSpan="3" Grid.Column="0">
-            
-        </Menu>
+        <StackPanel Grid.ColumnSpan="3" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Stretch" Background="White">
+            <Button Content="加载脚本" Margin="5" Click="Load_Script"></Button>
+            <Button Content="保存任务" Margin="5" Click="Save_Task"></Button>
+            <Button Content="运行任务" Margin="5" Click="Run_Task"></Button>
+            <Button Content="运行所有任务" Margin="5" Click="Run_AllTask"></Button>
+        </StackPanel>
         <Grid Grid.Column="0" Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"></RowDefinition>
@@ -28,40 +32,59 @@
             <DockPanel Grid.Row="0">
                 <TextBlock DockPanel.Dock="Top" Text="脚本列表" HorizontalAlignment="Center"
                            VerticalAlignment="Center" Foreground="White"></TextBlock>
-                <ListBox DockPanel.Dock="Bottom">
+                <ListBox DockPanel.Dock="Bottom" Name="scripts" MouseMove="Script_Move" MouseDown="Script_Down">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            
+
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
             </DockPanel>
             <GridSplitter Grid.Row="1"></GridSplitter>
-            <DockPanel Grid.Row="2">
-                <TextBlock DockPanel.Dock="Top" Text="任务列表" HorizontalAlignment="Center"
-                           VerticalAlignment="Center" Foreground="White"></TextBlock>
-                <ListBox DockPanel.Dock="Bottom">
+            <Grid Grid.Row="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"></RowDefinition>
+                    <RowDefinition Height="30"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <TextBlock Text="任务列表" Grid.Row="0" HorizontalAlignment="Center"
+                           VerticalAlignment="Center"  Foreground="White"></TextBlock>
+                <StackPanel Grid.Row="1" Orientation="Horizontal" Background="White">
+                    <Button Content="创建任务" Click="Create_Task"></Button>
+                    <Button Content="删除选中任务" Click="Remove_Task"></Button>
+                </StackPanel>
+                <ListBox  Name="tasks" Grid.Row="2">
 
                 </ListBox>
-            </DockPanel>
+            </Grid>
         </Grid>
         <GridSplitter Grid.Column="1" Grid.Row="1"></GridSplitter>
         <Grid Grid.Column="2" Grid.Row="1">
             <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="132"></RowDefinition>
                     <RowDefinition Height="2"></RowDefinition>
-                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="131"/>
                 </Grid.RowDefinitions>
-                <ListBox Grid.Row="0">
-
+                <ListBox Grid.Row="0" AllowDrop="True" Name="taskItem">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="/TKScripts.Manager;component/ICON/function.png" Stretch="Fill" Width="18" Height="18"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"></Image>
+                                <TextBlock Text="{Binding Path=ScriptName,Mode=TwoWay}" VerticalAlignment="Stretch" 
+                                  Name="scriptName" 
+                                 Background="{x:Null}"  Grid.Column="1" Margin="10, 0, 0, 0"></TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
                 </ListBox>
                 <GridSplitter Grid.Row="1"></GridSplitter>
-                <ListBox Grid.Row="2">
-
-                </ListBox>
+                <manager:SystemLogBox Grid.Row="2" x:Name="logBox">
+                    
+                </manager:SystemLogBox>
             </Grid>
         </Grid>
     </Grid>
-    
+
 </UserControl>

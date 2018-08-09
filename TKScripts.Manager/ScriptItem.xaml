@@ -13,7 +13,7 @@
         </Grid.ColumnDefinitions>
         <Image Source="ICON/function.png" Stretch="Fill" Width="18" Height="18"
                                VerticalAlignment="Center" HorizontalAlignment="Center"></Image>
-        <TextBox Text="{Binding Path=ScriptName,Mode=TwoWay}" VerticalAlignment="Stretch" 
+        <TextBox Text="{Binding Path=ScriptLayout.ScriptName,Mode=TwoWay}" VerticalAlignment="Stretch" 
                  VerticalContentAlignment="Center" IsEnabled="False" Name="scriptName" 
                  BorderThickness="0" Background="{x:Null}" LostFocus="scriptName_LostFocus" 
                  KeyDown="scriptName_KeyDown" Grid.Column="1" Margin="10, 0, 0, 0"></TextBox>

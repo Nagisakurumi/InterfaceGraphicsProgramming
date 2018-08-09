@@ -23,6 +23,7 @@ using TkScripts.Interface;
 using TkScripts.Script;
 using TkScripts.ScriptLayout;
 using TkScripts.ScriptLayout.StackingLayout;
+using TKScriptsServer.Agreement;
 
 namespace TScriptTestApp
 {
@@ -76,7 +77,7 @@ namespace TScriptTestApp
 
             if (opbox != null && libbox != null)
             {
-                opbox.CloneScriptFunction(libbox);
+                //opbox.CloneScriptFunction(libbox);
             }
         }
 
@@ -163,7 +164,7 @@ namespace TScriptTestApp
         {
             scriptRun = new Thread(() => {
                 StackScriptOption option = new StackScriptOption();
-                option.RunScript(this.scriptContent);
+                option.RunScript(this.scriptContent.ScriptLayout);
                 option = null;
             })
             { IsBackground = true, };

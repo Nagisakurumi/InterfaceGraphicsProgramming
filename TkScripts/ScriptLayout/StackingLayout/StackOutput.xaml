@@ -15,7 +15,7 @@
         <paramter:OutputParaItemLayout x:Name="output" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center"></paramter:OutputParaItemLayout>
         <DockPanel Grid.Column="1" VerticalAlignment="Center">
             <CheckBox Content="是否赋值" DockPanel.Dock="Left" VerticalContentAlignment="Center"
-                      IsChecked="{Binding ElementName=main,Path=IsUserSet}" Name="isopen" Unchecked="isopen_Unchecked"></CheckBox>
+                       Name="isopen" Unchecked="isopen_Unchecked"></CheckBox>
             <ComboBox Grid.Column="1" VerticalAlignment="Center" VerticalContentAlignment="Center" SelectedItem="{Binding Path=LinkIProperty}"
                       HorizontalContentAlignment="Center" Name="propertyCombox" IsEnabled="{Binding ElementName=isopen,Path=IsChecked}"></ComboBox>
         </DockPanel>

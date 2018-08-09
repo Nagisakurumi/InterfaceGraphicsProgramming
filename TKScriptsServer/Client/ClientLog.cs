@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TKScriptsServer.Agreement;
 
-namespace TkScripts.Interface
+namespace TKScriptsServer.Client
 {
-    public interface ITreeDataItem
+    public class ClientLog
     {
         /// <summary>
-        /// 函数类型
+        /// 客户端日志
         /// </summary>
-        ItemBoxEnum BoxType { get; set; }
+        public static LogLib.LogInfo Log = new LogLib.LogInfo() { FileName = "Client" };
     }
 }

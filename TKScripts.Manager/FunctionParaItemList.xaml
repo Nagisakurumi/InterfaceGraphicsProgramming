@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TKScripts.Manager"
              xmlns:stacklayout="clr-namespace:TkScripts.ScriptLayout.StackingLayout;assembly=TkScripts"
-             mc:Ignorable="d" 
+             mc:Ignorable="d" Name="main"
              >
     <Grid>
         <Grid.RowDefinitions>
@@ -17,10 +17,10 @@
             <Border DockPanel.Dock="Top">
                 <TextBlock Text="输入参数"></TextBlock>
             </Border>
-            <ListBox DockPanel.Dock="Bottom" ItemsSource="{Binding Path=InputDatas}">
+            <ListBox DockPanel.Dock="Bottom" ItemsSource="{Binding Path=ItemBox.InputDatas}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <stacklayout:IParaItemControl IsAsInput="True" ></stacklayout:IParaItemControl>
+                        <stacklayout:IParaItemControl IsAsInput="True" ScriptLayout="{Binding ElementName=main,Path=DataContext.ScriptLayout}"></stacklayout:IParaItemControl>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
@@ -30,10 +30,10 @@
             <Border DockPanel.Dock="Top">
                 <TextBlock Text="输出参数"></TextBlock>
             </Border>
-            <ListBox DockPanel.Dock="Bottom" ItemsSource="{Binding Path=OutDatas}">
+            <ListBox DockPanel.Dock="Bottom" ItemsSource="{Binding Path=ItemBox.OutDatas}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <stacklayout:IParaItemControl IsAsInput="False" ></stacklayout:IParaItemControl>
+                        <stacklayout:IParaItemControl IsAsInput="False" ScriptLayout="{Binding ElementName=main,Path=DataContext.ScriptLayout}"></stacklayout:IParaItemControl>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>

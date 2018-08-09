@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TkScripts.Interface;
+using TkScripts.ScriptLayout.StackingLayout;
 
 namespace TKScripts.Manager
 {
@@ -56,7 +57,7 @@ namespace TKScripts.Manager
         /// <summary>
         /// 绑定的脚本
         /// </summary>
-        private IScriptLayout script = null;
+        private StackingMainLayout script = null;
         /// <summary>
         /// 单击事件
         /// </summary>
@@ -64,7 +65,7 @@ namespace TKScripts.Manager
         /// <param name="e"></param>
         private void Item_OnceMouseDown(object sender, MouseButtonEventArgs e)
         {
-            IScriptLayout spt = ((sender as FrameworkElement).DataContext as IScriptLayout);
+            StackingMainLayout spt = ((sender as FrameworkElement).DataContext as StackingMainLayout);
             if (spt.ScriptName == script.ScriptName)
             {
                 double seconds = (DateTime.Now - forntTime).TotalSeconds;
@@ -116,7 +117,7 @@ namespace TKScripts.Manager
         /// <param name="e"></param>
         private void ScriptItem_Loaded(object sender, RoutedEventArgs e)
         {
-            script = this.DataContext as IScriptLayout;
+            script = this.DataContext as StackingMainLayout;
             if(script != null)
             {
                 script.PropertyChanged += Script_PropertyChanged;

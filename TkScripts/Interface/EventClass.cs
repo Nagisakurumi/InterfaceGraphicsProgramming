@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace TkScripts.Interface
 {
+
     /// <summary>
     /// itembox选中事件
     /// </summary>
+    /// <param name="scriptLayout"></param>
     /// <param name="selectedItembox"></param>
-    public delegate void ItemSelectedEvent(IItemBox selectedItembox);
+    public delegate void ItemSelectedEvent(IScriptLayout scriptLayout, IItemBox selectedItembox);
     /// <summary>
     /// 项鼠标事件
     /// </summary>

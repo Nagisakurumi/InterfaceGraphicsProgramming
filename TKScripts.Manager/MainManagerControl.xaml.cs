@@ -175,6 +175,7 @@ namespace TKScripts.Manager
             if(userControlExtend.ContainsKey(key))
             {
                 userControlExtend[key].Element.Title = newtitle;
+                userControlExtend[key].Title = newtitle;
             }
         }
         /// <summary>

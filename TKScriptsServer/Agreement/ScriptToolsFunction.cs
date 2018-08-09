@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using TkScripts.Script;
+using TKScriptsServer.Agreement;
 
-namespace TkScripts.ScriptLayout
+namespace TkScripts.Agreement
 {
     public class ScriptToolsFunction
     {
@@ -14,7 +14,7 @@ namespace TkScripts.ScriptLayout
             "{'parameter':[" +
             "{'name':'NowTime','type':'DATETIME','defult':'','enumdatas':'','tiptext':'返回当前执行时候的时间'}" +
             "]}",
-            "获取当前时间", ishasInput: false, ishasOutput: false, itemBoxEnum: ItemBoxEnum.FUNCTION)]
+            "获取当前时间", functionName:"获取当前时间", ishasInput: false, ishasOutput: false, itemBoxEnum: ItemBoxEnum.FUNCTION)]
         public static ScriptOutput GetNowTime(ScriptInput si)
         {
             ScriptOutput so = new ScriptOutput();
@@ -29,7 +29,7 @@ namespace TkScripts.ScriptLayout
             "{'parameter':[" +
             "{'name':'result','type':'BOOL','defult':'','enumdatas':'','tiptext':'比较的结果'}" +
             "]}",
-            "比较函数")]
+            "比较函数", functionName: "整形比较")]
         public static ScriptOutput EqualInt(ScriptInput si)
         {
             int int1 = Convert.ToInt32(si.GetValue("int1"));
@@ -68,7 +68,7 @@ namespace TkScripts.ScriptLayout
             "{'parameter':[" +
             "{'name':'result','type':'BOOL','defult':'','enumdatas':'','tiptext':'比较的结果'}" +
             "]}",
-            "比较函数")]
+            "比较函数", functionName: "浮点型比较")]
         public static ScriptOutput EqualDouble(ScriptInput si)
         {
             double int1 = Convert.ToDouble(si.GetValue("float1"));
@@ -103,12 +103,13 @@ namespace TkScripts.ScriptLayout
             "{'name':'obj','type':'OBJECT','defult':'','enumdatas':'','tiptext':'数组'}" +
             "]}",
             "",
-            "输出对象")]
+            "输出对象", functionName: "打印日志")]
         public static ScriptOutput PrintObject(ScriptInput si)
         {
+            ScriptOutput scriptOutput = new ScriptOutput();
             object obj = si.GetValue("obj") as object;
-            si.Write(obj.ToString());
-            return null;
+            scriptOutput.Write(obj.ToString());
+            return scriptOutput;
         }
         [ScriptMeth("{'parameter':[" +
             "{'name':'time1','type':'OBJECT','defult':1,'enumdatas':'','tiptext':'加数1'}," +
@@ -121,7 +122,7 @@ namespace TkScripts.ScriptLayout
             "{'name':'TotalSeconds','type':'FLOAT','defult':'','enumdatas':'','tiptext':'总秒数'}," +
             "{'name':'TotalMilliseconds','type':'FLOAT','defult':'','enumdatas':'','tiptext':'总毫秒数'}" +
             "]}",
-            "time1 - time2")]
+            "time1 - time2", functionName: "时间相减")]
         public static ScriptOutput TimeDesc(ScriptInput si)
         {
             DateTime time1 = Convert.ToDateTime(si.GetValue("time1"));
@@ -146,7 +147,7 @@ namespace TkScripts.ScriptLayout
             "{'name':'time','type':'INT','defult':1000,'enumdatas':'','tiptext':'超时时间'}" +
             "]}",
             "",
-            "延迟函数")]
+            "延迟函数", functionName: "延迟函数,Sleep")]
         public static ScriptOutput DelyTime(ScriptInput idx)
         {
             Thread.Sleep(Convert.ToInt32(idx.GetFirst()));
@@ -164,7 +165,7 @@ namespace TkScripts.ScriptLayout
             "{'parameter':[" +
             "{'name':'result','type':'INT','defult':'','enumdatas':'','tiptext':'求和的结果'}" +
             "]}",
-            "整形相加")]
+            "整形相加", functionName: "整形相加")]
         public static ScriptOutput AddInt(ScriptInput idx)
         {
             ScriptOutput so = new ScriptOutput();
@@ -184,7 +185,7 @@ namespace TkScripts.ScriptLayout
             "{'parameter':[" +
             "{'name':'result','type':'FLOAT','defult':'','enumdatas':'','tiptext':'求和的结果'}" +
             "]}",
-            "浮点型相加")]
+            "浮点型相加", functionName: "浮点型相加")]
         public static ScriptOutput AddFloat(ScriptInput idx)
         {
             ScriptOutput so = new ScriptOutput();

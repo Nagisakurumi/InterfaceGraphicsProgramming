@@ -11,8 +11,6 @@ namespace TkScripts.Interface
 {
     public class MLUIMain : UserControl, INotifyPropertyChanged
     {
-        
-
         /// <summary>
         /// 计算LinkPosition相对点的面板
         /// </summary>

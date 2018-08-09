@@ -8,6 +8,10 @@ using System.Threading.Tasks;
 using System.Windows.Media;
 using TkScripts.Interface;
 using TkScripts.ScriptLayout.StackingLayout;
+using TKScriptsServer.Agreement;
+using TKScriptsServer.Client;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace TkScripts.Script
 {
@@ -16,6 +20,10 @@ namespace TkScripts.Script
     /// </summary>
     public class StackScriptOption : IScriptInterpreter
     {
+        /// <summary>
+        /// 和服务通讯
+        /// </summary>
+        private static readonly ScriptClient ScriptClient = new ScriptClient();
         /// <summary>
         /// 用于线程阻塞公共资源
         /// </summary>
@@ -27,7 +35,7 @@ namespace TkScripts.Script
         /// <summary>
         /// 脚本运行线程
         /// </summary>
-        private Thread scriptRunThread = null;
+        private Task<bool> scriptRunThread = null;
         /// <summary>
         /// 获取属性的值
         /// </summary>
@@ -35,7 +43,7 @@ namespace TkScripts.Script
         /// <returns></returns>
         protected override object GetValue(IParatItem item)
         {
-            StackParatItem ipt = item as StackParatItem;
+            ParatItem ipt = item as ParatItem;
             if(ipt.LinkIProperty != null)
             {
                 return manager.GetValue(ipt.LinkIProperty.Id).GetValue(ipt.LinkIProperty.Name);
@@ -51,7 +59,7 @@ namespace TkScripts.Script
         /// <param name="item"></param>
         protected override void SetValue(IParatItem item)
         {
-            StackParatItem ipt = item as StackParatItem;
+            ParatItem ipt = item as ParatItem;
             if (ipt.LinkIProperty != null)
             {
                 manager.GetValue(ipt.LinkIProperty.Id).SetValue(ipt.LinkIProperty.Name, ipt.Value);
@@ -63,7 +71,7 @@ namespace TkScripts.Script
         /// <param name="whilebox"></param>
         /// <param name="startidx"></param>
         /// <returns></returns>
-        protected int GetWhileBoxIdx(StackItemBox whilebox, int startidx)
+        protected int GetWhileBoxIdx(ItemBox whilebox, int startidx)
         {
             int returnindex = 0;
             ScriptOutput soutidx = manager.GetValue(whilebox.Id);
@@ -82,7 +90,7 @@ namespace TkScripts.Script
                 soutidx.SetValue("Idx", returnindex);
             }
             whilebox.OutDatas[0].Value = returnindex;
-            SetValue(whilebox.OutDatas[0] as StackParatItem);
+            SetValue(whilebox.OutDatas[0] as ParatItem);
             return returnindex;
         }
         /// <summary>
@@ -90,14 +98,14 @@ namespace TkScripts.Script
         /// </summary>
         /// <param name="box"></param>
         /// <returns></returns>
-        protected ScriptInput GetFunctionInput(IItemBox box)
+        protected ScriptInput GetFunctionInput(ItemBox box)
         {
             ScriptInput si = new ScriptInput();
             foreach (var item in box.InputDatas)
             {
                 if (item.PIEnum != ParaItemEnum.INPUT)
                 {
-                    si.SetValue(item.Name, GetValue(item as StackParatItem));
+                    si.SetValue(item.Name, GetValue(item as ParatItem));
                 }
             }
             return si;
@@ -106,27 +114,30 @@ namespace TkScripts.Script
         /// 执行准确的函数
         /// </summary>
         /// <param name="box"></param>
-        protected void Dofunction(IItemBox box, WriteStreamCallBack wrs, IScriptLayout ml)
+        protected void Dofunction(ItemBox box, WriteStreamCallBack wrs, IScriptLayout ml)
         {
-            ml.SetFunctionBoxRun(Colors.Red, box);
+            //ml.SetFunctionBoxRun(Colors.Red, box);
             ScriptInput si = new ScriptInput();
             foreach (var item in box.InputDatas)
             {
                 if(item.PIEnum != ParaItemEnum.INPUT)
                 {
-                    si.SetValue(item.Name, GetValue(item as StackParatItem));
+                    si.SetValue(item.Name, GetValue(item as ParatItem));
                 }
             }
-            si.WriteStream += wrs;
-            ScriptOutput so = box.DoScriptFunction(si);
-            if(so != null)
+            
+            ScriptOutput so = RunScript(box, si);
+            //ScriptOutput so = null;             ////////////////////////////////////待修改
+            if (so != null)
             {
+                if(so.LogMessage != null && so.LogMessage.Equals("") == false)
+                    wrs?.Invoke(so.LogMessage);
                 foreach (var item in box.OutDatas)
                 {
                     if(item.PIEnum != ParaItemEnum.OUTPUT)
                     {
                         item.Value = so.GetValue(item.Name);
-                        SetValue(item as StackParatItem);
+                        SetValue(item as ParatItem);
                     }
                 }
                 
@@ -140,21 +151,21 @@ namespace TkScripts.Script
             }
             si.Dispose();
             si = null;
-            ml.SetFunctionBoxStop(Colors.White, box);
+            //ml.SetFunctionBoxStop(Colors.White, box);
         }
         /// <summary>
         /// 执行if框
         /// </summary>
         /// <param name="box"></param>
         /// <returns></returns>
-        protected void DoIfFunction(IItemBox box, WriteStreamCallBack wrs, IScriptLayout ml)
+        protected void DoIfFunction(ItemBox box, WriteStreamCallBack wrs, IScriptLayout ml)
         {
             ScriptInput si = new ScriptInput();
             foreach (var item in box.InputDatas)
             {
                 if (item.PIEnum != ParaItemEnum.INPUT)
                 {
-                    si.SetValue(item.Name, GetValue(item as StackParatItem));
+                    si.SetValue(item.Name, GetValue(item as ParatItem));
                 }
             }
 
@@ -163,11 +174,11 @@ namespace TkScripts.Script
 
             if (Convert.ToBoolean(si.GetFirst()))
             {
-                RunningFunction((box as StackItemBox).Children[0], wrs, ml);
+                RunningFunction((box as ItemBox).Children[0], wrs, ml);
             }
             else
             {
-                RunningFunction((box as StackItemBox).Children[1], wrs, ml);
+                RunningFunction((box as ItemBox).Children[1], wrs, ml);
             }
             si.Dispose();
             si = null;
@@ -177,9 +188,9 @@ namespace TkScripts.Script
         /// </summary>
         /// <param name="box"></param>
         /// <returns></returns>
-        protected void DoWhileFunction(IItemBox box, WriteStreamCallBack wrs, IScriptLayout ml)
+        protected void DoWhileFunction(ItemBox box, WriteStreamCallBack wrs, IScriptLayout ml)
         {
-            StackItemBox sbox = box as StackItemBox;
+            ItemBox sbox = box as ItemBox;
             if (box.InputDatas.Count == 1)
             {
                 if (box.InputDatas[0].PIEnum == ParaItemEnum.BOOL)
@@ -263,9 +274,9 @@ namespace TkScripts.Script
         /// <param name="ml"></param>
         protected void RunningFunction(IItemBox box, WriteStreamCallBack wrs, IScriptLayout ml)
         {
-            foreach (var currentbox in (box as StackItemBox).Children)
+            foreach (var currentbox in (box as ItemBox).Children)
             {
-                ml.SetFunctionBoxRun(Colors.Red, currentbox);
+                //ml.SetFunctionBoxRun(Colors.Red, currentbox);
                 if (currentbox.BoxType == ItemBoxEnum.FUNCTION)
                 {
                     Dofunction(currentbox, wrs, ml);
@@ -278,18 +289,18 @@ namespace TkScripts.Script
                 {
                     DoWhileFunction(currentbox, wrs, ml);
                 }
-                ml.SetFunctionBoxStop(Colors.White, currentbox);
+                //ml.SetFunctionBoxStop(Colors.White, currentbox);
             }
         }
         /// <summary>
         /// 运行脚本
         /// </summary>
         /// <param name="m"></param>
-        public override void RunScript(IScriptLayout m)
+        public override Task<bool> RunScript(IScriptLayout m)
         {
-            if (scriptRunThread != null && scriptRunThread.IsAlive) return;
+            if (scriptRunThread != null && scriptRunThread.IsCompleted == false) return null;
 
-            scriptRunThread = new Thread((obj) =>
+            scriptRunThread = new Task<bool>((obj) =>
             {
                 IScriptLayout ml = obj as IScriptLayout;
                 WriteStreamCallBack wrs = ml.ComipleMessageCall;
@@ -302,8 +313,8 @@ namespace TkScripts.Script
                     wrs?.Invoke("赋值属性完成,开始执行脚本");
                     foreach (var currentbox in ml.Itemboxs)
                     {
-                        //RunningFunction(currentbox, wrs, ml);
-                        ml.SetFunctionBoxRun(Colors.Red, currentbox);
+                        RunningFunction(currentbox, wrs, ml);
+                        //ml.SetFunctionBoxRun(Colors.Red, currentbox);
                         if (currentbox.BoxType == ItemBoxEnum.FUNCTION)
                         {
                             Dofunction(currentbox, wrs, ml);
@@ -316,22 +327,24 @@ namespace TkScripts.Script
                         {
                             DoWhileFunction(currentbox, wrs, ml);
                         }
-                        ml.SetFunctionBoxStop(Colors.White, currentbox);
+                        //ml.SetFunctionBoxStop(Colors.White, currentbox);
                     }
+                    return true;
                 }
                 catch (Exception ex)
                 {
                     wrs?.Invoke("脚本运行失败");
-                    Log.Write(new LogMessage("脚本运行失败", ex));
+                    Log.ScriptLog.Log.Write(new LogMessage("脚本运行失败", ex));
+                    return false;
                 }
                 finally
                 {
                     manager.Clear();
                     wrs?.Invoke("程序运行结束");
                 }
-            })
-            { IsBackground = true,};
-            scriptRunThread.Start(m);
+            }, m);
+            scriptRunThread.Start();
+            return scriptRunThread;
         }
         /// <summary>
         /// 初始化
@@ -374,7 +387,7 @@ namespace TkScripts.Script
         /// </summary>
         public override void RunNextFunction()
         {
-            if (scriptRunThread == null || !scriptRunThread.IsAlive) return;
+            if (scriptRunThread == null || scriptRunThread.IsCompleted) return;
             threadAre.Set();
             isDebugMode = true;
         }
@@ -383,9 +396,22 @@ namespace TkScripts.Script
         /// </summary>
         public override void RunOver()
         {
-            if (scriptRunThread == null || !scriptRunThread.IsAlive) return;
+            if (scriptRunThread == null || scriptRunThread.IsCompleted) return;
             threadAre.Set();
             isDebugMode = false;
+        }
+
+        /// <summary>
+        /// 运行带url的函数
+        /// </summary>
+        /// <param name="itemBox"></param>
+        /// <param name="scriptInput"></param>
+        /// <returns></returns>
+
+        private ScriptOutput RunScript(IItemBox itemBox, ScriptInput scriptInput)
+        {
+            string json = ScriptClient.PostStringAsync(itemBox.ScriptUrl, (JObject)JsonConvert.DeserializeObject(JsonConvert.SerializeObject(scriptInput)));
+            return JsonConvert.DeserializeObject<ScriptOutput>(json);
         }
     }
 }

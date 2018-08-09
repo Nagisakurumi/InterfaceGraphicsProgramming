@@ -12,11 +12,11 @@ namespace TkScripts.Interface
     public class IFunctionBox : MLUIMain
     {
 
-        protected IItemBox ibox = null;
+        protected ItemBox ibox = null;
         /// <summary>
         /// 代码内容
         /// </summary>
-        public IItemBox Ibox
+        public ItemBox Ibox
         {
             get
             {
@@ -91,8 +91,8 @@ namespace TkScripts.Interface
         public void SetFunctionBoxRun(Color color)
         {
             this.Dispatcher.Invoke(new Action<Color>((c) => {
-                ibox.BoxBrush = null;
-                ibox.BoxBrush = new SolidColorBrush(c);
+                //ibox.BoxBrush = null;
+                //ibox.BoxBrush = new SolidColorBrush(c);
             }), color);
         }
         /// <summary>
@@ -102,8 +102,8 @@ namespace TkScripts.Interface
         public void SetFunctionBoxStop(Color color)
         {
             this.Dispatcher.Invoke(new Action<Color>((c) => {
-                ibox.BoxBrush = null;
-                ibox.BoxBrush = new SolidColorBrush(c);
+                //ibox.BoxBrush = null;
+                //ibox.BoxBrush = new SolidColorBrush(c);
             }), color);
         }
     }

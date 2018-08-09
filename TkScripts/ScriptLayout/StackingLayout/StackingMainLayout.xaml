@@ -1,4 +1,4 @@
-﻿<iscript:IScriptLayout x:Class="TkScripts.ScriptLayout.StackingLayout.StackingMainLayout"
+﻿<UserControl x:Class="TkScripts.ScriptLayout.StackingLayout.StackingMainLayout"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,10 +6,10 @@
              xmlns:local="clr-namespace:TkScripts.ScriptLayout.StackingLayout"
              xmlns:iscript="clr-namespace:TkScripts.Interface"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300" x:Name="main">
+             x:Name="main">
     <Border Background="White" BorderThickness="3" CornerRadius="10">
-        <TreeView ItemsSource="{Binding ElementName=main,Path=Itemboxs}" Focusable="True"
-                  Name="XTreeView" SelectedItemChanged="XTreeView_SelectedItemChanged" Background="#FFD4CDCD">
+        <TreeView ItemsSource="{Binding Path=Itemboxs}" Focusable="True"
+                  Name="XTreeView" SelectedItemChanged="XTreeView_SelectedItemChanged" Background="#FF8E909E">
             <TreeView.ItemContainerStyle>
                 <Style TargetType="{x:Type TreeViewItem}">
                     <Setter Property="IsExpanded" Value="{Binding IsExpanded}"/>
@@ -42,4 +42,4 @@
             </TreeView.ItemTemplate>
         </TreeView>
     </Border>
-</iscript:IScriptLayout>
+</UserControl>

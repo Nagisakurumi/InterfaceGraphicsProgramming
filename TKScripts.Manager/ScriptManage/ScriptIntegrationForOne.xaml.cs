@@ -21,6 +21,8 @@ using Newtonsoft.Json;
 using System.IO;
 using TkScripts;
 using TkScripts.Script;
+using TKScriptsServer.Agreement;
+using System.ComponentModel;
 
 namespace TKScripts.Manager.ScriptManage
 {
@@ -29,37 +31,6 @@ namespace TKScripts.Manager.ScriptManage
     /// </summary>
     public partial class ScriptIntegrationForOne : UserControl
     {
-
-        #region 属性
-        /// <summary>
-        /// 数据
-        /// </summary>
-        private DataTreeView treeView = null;
-        /// <summary>
-        /// 脚本列表控件
-        /// </summary>
-        private ScriptControl scriptControl = new ScriptControl();
-        /// <summary>
-        /// 属性列表控件
-        /// </summary>
-        private PropertyItControl propertyItControl = new PropertyItControl();
-        /// <summary>
-        /// 函数参数列表控件
-        /// </summary>
-        private FunctionParaItemList functionParaItemList = new FunctionParaItemList();
-        /// <summary>
-        /// 脚本监视窗口
-        /// </summary>
-        private ScriptDebugWindow scriptDebugWindow = new ScriptDebugWindow();
-        /// <summary>
-        /// 日志窗口
-        /// </summary>
-        private SystemLogBox logBox = new SystemLogBox();
-        /// <summary>
-        /// 所有的函数数据源
-        /// </summary>
-        private ObservableCollection<TreeData> allFunctionData = new ObservableCollection<TreeData>();
-        #endregion
         #region 访问器
         /// <summary>
         /// 布局管理器
@@ -74,97 +45,51 @@ namespace TKScripts.Manager.ScriptManage
         /// <summary>
         /// 脚本管理列表
         /// </summary>
-        public ScriptControl ScriptControl
-        {
-            get
-            {
-                return scriptControl;
-            }
-        }
+        public ScriptControl ScriptControl { get; } = new ScriptControl();
+
         /// <summary>
         /// 函数的全局属性列表
         /// </summary>
-        public PropertyItControl PropertyItControl
-        {
-            get
-            {
-                return propertyItControl;
-            }
-        }
+        public PropertyItControl PropertyItControl { get; } = new PropertyItControl();
+
         /// <summary>
         /// 函数的参数列表
         /// </summary>
-        public FunctionParaItemList FunctionParaItemList
-        {
-            get
-            {
-                return functionParaItemList;
-            }
-        }
+        public FunctionParaItemList FunctionParaItemList { get; } = new FunctionParaItemList();
+
         /// <summary>
         /// 日志窗口
         /// </summary>
-        public SystemLogBox LogBox
-        {
-            get
-            {
-                return logBox;
-            }
-        }
+        public SystemLogBox LogBox { get; } = new SystemLogBox();
+
         /// <summary>
         /// 代码块工具箱的数据源
         /// </summary>
-        public ObservableCollection<TreeData> AllFunctionData
-        {
-            get
-            {
-                return allFunctionData;
-            }
-        }
+        public ObservableCollection<TreeData> AllFunctionData { get; } = new ObservableCollection<TreeData>();
+
         /// <summary>
         /// 代码块工具箱
         /// </summary>
-        public DataTreeView TreeView
-        {
-            get
-            {
-                return treeView;
-            }
+        public DataTreeView TreeView { get; set; } = null;
 
-            set
-            {
-                treeView = value;
-            }
-        }
         /// <summary>
         /// 脚本列表
         /// </summary>
-        public ObservableCollection<IScriptLayout> Scripts
+        public ObservableCollection<StackingMainLayout> Scripts
         {
             get
             {
-                return scriptControl.Scripts;
+                return ScriptControl.Scripts;
             }
             set
             {
-                scriptControl.Scripts = value;
+                ScriptControl.Scripts = value;
             }
         }
         /// <summary>
         /// 脚本监视窗口
         /// </summary>
-        public ScriptDebugWindow ScriptDebugWindow
-        {
-            get
-            {
-                return scriptDebugWindow;
-            }
-
-            set
-            {
-                scriptDebugWindow = value;
-            }
-        }
+        public ScriptDebugWindow ScriptDebugWindow { get; set; } = new ScriptDebugWindow();
         #endregion
         /// <summary>
         /// 构造函数
@@ -180,14 +105,15 @@ namespace TKScripts.Manager.ScriptManage
             mainContent.AddUserControl("logBox", LogBox, Layout.Buttom, "输出");
             mainContent.AddUserControl("treeView", TreeView, Layout.LeftSide, "代码工具箱");
             mainContent.AddUserControl("watchView", ScriptDebugWindow, Layout.Right, "监视窗口");
+            AllFunctionData.Add(IScriptLayout.AddSystemBox());
             TreeView.MyData = AllFunctionData;
             TreeView.CreateCallback += TreeView_CreateCallback;
-            AllFunctionData.Add(IScriptLayout.AddSystemBox());
-            AllFunctionData.Add(IScriptLayout.AddToolsFunction());
+            //AllFunctionData.Add(IScriptLayout.AddSystemBox());
+            //AllFunctionData.Add(IScriptLayout.AddToolsFunction());
             ScriptControl.ItemMouseDoubleClickEvent += ScriptControl_ItemMouseDoubleClickEvent;
             ScriptControl.ItemAddEvent += ScriptControl_ItemAddEvent;
             ScriptControl.ItemRemoveEvent += ScriptControl_ItemRemoveEvent;
-            scriptControl.ItemScriptNameChanged += ScriptControl_ItemScriptNameChanged;
+            ScriptControl.ItemScriptNameChanged += ScriptControl_ItemScriptNameChanged;
             //ScriptControl.AddScript(new StackingMainLayout() { ScriptName = "测试脚本" });
 
         }
@@ -198,7 +124,7 @@ namespace TKScripts.Manager.ScriptManage
         /// <param name="selectedItem"></param>
         private void ScriptControl_ItemScriptNameChanged(object selectedItem)
         {
-            IScriptLayout script = selectedItem as IScriptLayout;
+            StackingMainLayout script = selectedItem as StackingMainLayout;
             mainContent.ModifyTitleById(script.Id, script.ScriptName);
         }
         /// <summary>
@@ -208,7 +134,7 @@ namespace TKScripts.Manager.ScriptManage
         /// <param name="e"></param>
         private void UserControl_KeyDown(object sender, KeyEventArgs e)
         {
-            IScriptLayout script = mainContent.GetActiveDocument() as IScriptLayout;
+            StackingMainLayout script = mainContent.GetActiveDocument() as StackingMainLayout;
             if(script != null)
             {
                 script.IScriptLayout_KeyDown(script, e);
@@ -229,11 +155,11 @@ namespace TKScripts.Manager.ScriptManage
         /// <param name="selectedItem"></param>
         private void ScriptControl_ItemRemoveEvent(object selectedItem)
         {
-            IScriptLayout script = selectedItem as IScriptLayout;
+            StackingMainLayout script = selectedItem as StackingMainLayout;
             script.IItemBoxSelected -= IItemBoxSelected;
-            script.ComipleMessageCall -= LogBox.WritLog;
+            script.ScriptLayout.ComipleMessageCall -= LogBox.WritLog;
             mainContent.DelUserExtendByKey(script.Id);
-            script.ScriptBreakPoint -= ScriptBreakPoint;
+            script.ScriptLayout.ScriptBreakPoint -= ScriptBreakPoint;
         }
         /// <summary>
         /// 脚本添加事件
@@ -241,16 +167,16 @@ namespace TKScripts.Manager.ScriptManage
         /// <param name="selectedItem"></param>
         private void ScriptControl_ItemAddEvent(object selectedItem)
         {
-            IScriptLayout script = selectedItem as IScriptLayout;
+            StackingMainLayout script = selectedItem as StackingMainLayout;
             if (script.IItemBoxSelected == null)
             {
                 script.IItemBoxSelected += IItemBoxSelected;
             }
-            if (script.ComipleMessageCall == null)
+            if (script.ScriptLayout.ComipleMessageCall == null)
             {
-                script.ComipleMessageCall = LogBox.WritLog;
+                script.ScriptLayout.ComipleMessageCall = LogBox.WritLog;
             }
-            script.ScriptBreakPoint += ScriptBreakPoint;
+            script.ScriptLayout.ScriptBreakPoint += ScriptBreakPoint;
         }
         /// <summary>
         /// 脚本断点回调函数
@@ -271,7 +197,7 @@ namespace TKScripts.Manager.ScriptManage
         {
             if (mainContent.GetActiveDocument() != null)
             {
-                IScriptLayout script = mainContent.GetActiveDocument() as IScriptLayout;
+                StackingMainLayout script = mainContent.GetActiveDocument() as StackingMainLayout;
                 script.DataTree_CreateCallback(data);
             }
         }
@@ -281,7 +207,7 @@ namespace TKScripts.Manager.ScriptManage
         /// <param name="selectedItem"></param>
         private void ScriptControl_ItemMouseDoubleClickEvent(object selectedItem)
         {
-            IScriptLayout script = selectedItem as IScriptLayout;
+            StackingMainLayout script = selectedItem as StackingMainLayout;
             if (mainContent.GetUserExtendByKey(script.Id) != null)
             {
                 mainContent.ShowPane(script.Id);
@@ -297,16 +223,18 @@ namespace TKScripts.Manager.ScriptManage
         /// 代码块被选中
         /// </summary>
         /// <param name="itembox"></param>
-        public void IItemBoxSelected(IItemBox itembox)
+        public void IItemBoxSelected(IScriptLayout scriptLayout, IItemBox itembox)
         {
-            FunctionParaItemList.DataContext = itembox;
+            ItemboxParamterCom itemboxParamterCom = new ItemboxParamterCom() { ScriptLayout = scriptLayout, ItemBox = itembox };
+            FunctionParaItemList.DataContext = itemboxParamterCom;
+            //FunctionParaItemList.DataContext = itembox;
         }
         #endregion
         #region 方法
         /// <summary>
         /// 设置初始数据源
         /// </summary>
-        /// <param name=""></param>
+        /// <param name="treedata"></param>
         public void SetFunctionData(ObservableCollection<TreeData> treedata)
         {
             foreach (var item in treedata)
@@ -315,11 +243,19 @@ namespace TKScripts.Manager.ScriptManage
             }
         }
         /// <summary>
+        /// 重置用户函数
+        /// </summary>
+        public void RestFunctionData()
+        {
+            AllFunctionData.Clear();
+            AllFunctionData.Add(IScriptLayout.AddSystemBox());
+        }
+        /// <summary>
         /// 运行当前激活的脚本
         /// </summary>
         public void RunActiveScript()
         {
-            IScriptLayout script = mainContent.GetActiveDocument() as IScriptLayout;
+            IScriptLayout script = (mainContent.GetActiveDocument() as StackingMainLayout).ScriptLayout;
             script.RunCompile();
         }
         /// <summary>
@@ -337,15 +273,38 @@ namespace TKScripts.Manager.ScriptManage
         /// <param name="path"></param>
         public void LoadScripts(string path)
         {
-            IList<IScriptLayout> scripts = ScriptHelp.Load(path);
-            ScriptControl.RemoveAll();
-            foreach (var item in scripts)
-            {
-                ScriptControl.AddScript(item);
-            }
+            //IList<StackingMainLayout> scripts = ScriptHelp.Load(path);
+            //ScriptControl.RemoveAll();
+            //foreach (var item in scripts)
+            //{
+            //    ScriptControl.AddScript(item);
+            //}
         }
         #endregion
 
         
+    }
+
+    internal class ItemboxParamterCom : INotifyPropertyChanged
+    {
+
+        private IScriptLayout scriptLayout = null;
+
+        private IItemBox itemBox = null;
+
+        public IScriptLayout ScriptLayout
+        { get { return scriptLayout; } set { scriptLayout = value; Changed("ScriptLayout"); } }
+
+        public IItemBox ItemBox { get { return itemBox; } set { itemBox = value; Changed("Itembox"); } }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        /// <summary>
+        /// 改变
+        /// </summary>
+        /// <param name="name"></param>
+        protected void Changed(string name)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
     }
 }

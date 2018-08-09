@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Media.Imaging;
 using TkScripts.Interface;
-using TkScripts.ScriptLayout.BezierLinkLayout;
+//using TkScripts.ScriptLayout.BezierLinkLayout;
 using TkScripts.ScriptLayout.StackingLayout;
 using Newtonsoft.Json;
 
@@ -25,7 +25,7 @@ namespace TkScripts.ScriptLayout
         /// </summary>
         private static Dictionary<string, string> exName = new Dictionary<string, string>()
         {
-            { typeof(MainLayout).Name, "LineScript"},
+            //{ typeof(MainLayout).Name, "LineScript"},
             { typeof(StackingMainLayout).Name, "TreeScript"},
         };
         /// <summary>
@@ -51,13 +51,13 @@ namespace TkScripts.ScriptLayout
             {
                 if(item.Value == exname)
                 {
-                    if(item.Key == typeof(MainLayout).Name)
+                    //if(item.Key == typeof(MainLayout).Name)
+                    //{
+                    //    script = new MainLayout();
+                    //}
+                    if(item.Key == typeof(StackingMainLayout).Name)
                     {
-                        script = new MainLayout();
-                    }
-                    else if(item.Key == typeof(StackingMainLayout).Name)
-                    {
-                        script = new StackingMainLayout();
+                        //script = new StackingMainLayout();
                     }
                 }
             }
@@ -65,7 +65,7 @@ namespace TkScripts.ScriptLayout
             {
                 return null;
             }
-            script.LoadFromJson<StackItemBox, PropertyIt, StackParatItem>(filename);
+            script.LoadFromJson(filename);
             return script;
         }
 

@@ -9,8 +9,14 @@ namespace TkScripts.Interface
 {
     public interface ICompile
     {
-        void RunCompile();
-
+        /// <summary>
+        /// 运行
+        /// </summary>
+        /// <returns></returns>
+        Task<bool> RunCompile();
+        /// <summary>
+        /// 暂停
+        /// </summary>
         void StopRun();
     }
 }

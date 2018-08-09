@@ -4,10 +4,10 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using TkScripts.Script;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using static TKScriptsServer.ServerLog;
+using TKScriptsServer.Agreement;
 
 namespace TKScriptsServer.API
 {
@@ -27,7 +27,7 @@ namespace TKScriptsServer.API
         /// <summary>
         /// 脚本api列表
         /// </summary>
-        internal Dictionary<string, ScriptAPI> scriptAPIs { get; } = new Dictionary<string, ScriptAPI>();
+        public Dictionary<string, ScriptAPI> scriptAPIs { get; } = new Dictionary<string, ScriptAPI>();
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -45,22 +45,23 @@ namespace TKScriptsServer.API
         /// <param name="response">回写流</param>
         public void RequestCallBack(HttpListenerRequest request, HttpListenerResponse response)
         {
+            RequestMsg requestMsg = null;
             try
             {
-                RequestMsg requestMsg = ScriptServer.GetRequestMessage(request);
+                requestMsg = ScriptServer.GetRequestMessage(request);
                 if (requestMsg.ApiName.Equals(GetAllAPIUrlAPIName))
                 {
                     writeResponse(getAllApi(), response, 200);
                 }
                 else if (scriptAPIs.ContainsKey(requestMsg.ApiName))
                 {
-                    ScriptInput scriptInput = new ScriptInput();
-                    foreach (var item in requestMsg.ValuePairs)
-                    {
-                        scriptInput.SetValue(item.Key, item.Value);
-                    }
+                    ScriptInput scriptInput = requestMsg.ValuePairs;
                     ScriptOutput scriptOutput = scriptAPIs[requestMsg.ApiName].ScriptFunction(scriptInput);
-                    writeResponse(scriptInput, response, 200);
+                    writeResponse(scriptOutput, response, 200);
+                    scriptOutput.Dispose();
+                    scriptInput.Dispose();
+                    scriptOutput = null;
+                    scriptInput = null;
                 }
                 else
                 {
@@ -72,6 +73,14 @@ namespace TKScriptsServer.API
             {
                 writeResponse(response, 201);
                 Log.Write("客户端调用出错", ex);
+            }
+            finally
+            {
+                if(requestMsg != null)
+                {
+                    requestMsg.Dispose();
+                    requestMsg = null;
+                }
             }
         }
 
@@ -120,7 +129,12 @@ namespace TKScriptsServer.API
         /// <returns></returns>
         private string getAllApi()
         {
-            return JsonConvert.SerializeObject(scriptAPIs).ToString();
+            List<ScriptMethAttribute> scriptMeths = new List<ScriptMethAttribute>();
+            foreach (var item in scriptAPIs)
+            {
+                scriptMeths.Add(item.Value.ScriptMethAttribute);
+            }
+            return JsonConvert.SerializeObject(scriptMeths).ToString();
         }
         /// <summary>
         /// 回复客户端信息

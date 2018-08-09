@@ -205,24 +205,6 @@ namespace TkScripts.ScriptLayout
                 Changed("Name");
             }
         }
-
-        /// <summary>
-        /// 将本数据导入half
-        /// </summary>
-        /// <param name="half"></param>
-        public void HalfClone(IItemBox half)
-        {
-            if (data == null) return;
-            for (int i = 0; i < data.InputDatas.Count; i++)
-            {
-                half.InputDatas[i].EnumDatas = data.InputDatas[i].EnumDatas;
-            }
-            for (int i = 0; i < data.OutDatas.Count; i++)
-            {
-                half.OutDatas[i].EnumDatas = data.OutDatas[i].EnumDatas;
-            }
-            half.CloneScriptFunction(data);
-        }
     }
     /// <summary>
     /// 创建数据

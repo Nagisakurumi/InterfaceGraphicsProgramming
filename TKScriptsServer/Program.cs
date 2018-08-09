@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TkScripts;
-using TkScripts.Script;
+using TKScriptsServer.Agreement;
 using TKScriptsServer.API;
 
 namespace TKScriptsServer

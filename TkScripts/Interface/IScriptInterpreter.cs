@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TkScripts.Interface;
 using TkScripts.Script;
+using TKScriptsServer.Agreement;
 
 namespace TkScripts.Interface
 {
@@ -41,7 +42,7 @@ namespace TkScripts.Interface
         /// </summary>
         /// <param name="ml"></param>
         /// <param name="wrs"></param>
-        public abstract void RunScript(IScriptLayout ml);
+        public abstract Task<bool> RunScript(IScriptLayout ml);
         /// <summary>
         /// 脚本运行断点回调函数
         /// </summary>

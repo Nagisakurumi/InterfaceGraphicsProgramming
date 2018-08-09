@@ -12,29 +12,14 @@
             <RowDefinition Height="50"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <WrapPanel Grid.Row="0">
-            <Border Background="White" MouseDown="CreateInt_MouseDown">
-                <TextBlock Text="+添加整形变量" Margin="5"></TextBlock>
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <Border Background="White" MouseDown="CreateInt_MouseDown" VerticalAlignment="Center" Margin="10">
+                <TextBlock Text="+添加变量" Margin="5"></TextBlock>
             </Border>
-            <Border Background="White" MouseDown="CreateFloat_MouseDown">
-                <TextBlock Text="+添加浮点型变量" Margin="5"></TextBlock>
-            </Border>
-            <Border Background="White" MouseDown="CreateBool_MouseDown">
-                <TextBlock Text="+添加布尔变量" Margin="5"></TextBlock>
-            </Border>
-            <Border Background="White" MouseDown="CreateDate_MouseDown">
-                <TextBlock Text="+添加时间变量" Margin="5"></TextBlock>
-            </Border>
-            <Border Background="White" MouseDown="CreateObject_MouseDown">
-                <TextBlock Text="+添加Object变量" Margin="5"></TextBlock>
-            </Border>
-            <Border Background="White" MouseDown="CreatePoint_MouseDown">
-            <TextBlock Text="+添加Point变量" Margin="5"></TextBlock>
-            </Border>
-            <Border Background="White" MouseDown="Remove_MouseDown">
+            <Border Background="White" MouseDown="Remove_MouseDown" VerticalAlignment="Center" Margin="10">
                 <TextBlock Text="-删除变量" Margin="5"></TextBlock>
             </Border>
-        </WrapPanel>
+        </StackPanel>
         <ListBox Grid.Row="1" Background="#00000000" DockPanel.Dock="Bottom" Margin="0, 4, 0, 0" Name="propertysList">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">

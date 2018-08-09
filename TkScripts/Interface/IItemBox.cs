@@ -11,6 +11,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using TkScripts.Script;
 using TkScripts.ScriptLayout;
+using TKScriptsServer.Agreement;
+using TKScriptsServer.Client;
 
 namespace TkScripts.Interface
 {
@@ -25,10 +27,6 @@ namespace TkScripts.Interface
         /// </summary>
         string Id { get; set; }
         /// <summary>
-        /// 粗细
-        /// </summary>
-        double Thickness { get; set; }
-        /// <summary>
         /// 函数类型
         /// </summary>
         ItemBoxEnum BoxType { get; set; }
@@ -36,20 +34,6 @@ namespace TkScripts.Interface
         /// 是否拥有断点
         /// </summary>
         bool IsHasBreakPoint { get; set; }
-        /// <summary>
-        /// 所属脚本
-        /// </summary>
-        [JsonIgnore]
-        IScriptLayout ScriptLayout { get; set; }
-        /// <summary>
-        /// 输入参数列表
-        /// </summary>
-        ObservableCollection<IParatItem> InputDatas { get; }
-
-        /// <summary>
-        /// 输入参数列表
-        /// </summary>
-        ObservableCollection<IParatItem> OutDatas { get; }
         /// <summary>
         /// 添加输入值
         /// </summary>
@@ -60,6 +44,16 @@ namespace TkScripts.Interface
         /// </summary>
         /// <param name="pitem"></param>
         void AddOutput(IParatItem pitem);
+        /// <summary>
+        /// 获取输入的列表
+        /// </summary>
+        /// <returns></returns>
+        ObservableCollection<IParatItem> GetInputParatItems();
+        /// <summary>
+        /// 获取输出列表
+        /// </summary>
+        /// <returns></returns>
+        ObservableCollection<IParatItem> GetOutputParatItems();
         /// <summary>
         /// 克隆
         /// </summary>
@@ -76,51 +70,40 @@ namespace TkScripts.Interface
         /// </summary>
         void PropertyValueChanged(object sender, PropertyChangedEventArgs e);
         /// <summary>
-        /// 脚本执行事件
+        /// 脚本请求地址
         /// </summary>
-        ScriptFunction ScriptFunction { get; set; }
-        /// <summary>
-        /// 克隆脚本函数地址
-        /// </summary>
-        /// <param name="opbox"></param>
-        void CloneScriptFunction(IItemBox opbox);
-        /// <summary>
-        /// 设置脚本函数地址
-        /// </summary>
-        /// <param name="sf"></param>
-        void SetScriptFunction(ScriptFunction sf);
-        /// <summary>
-        /// 脚本执行函数
-        /// </summary>
-        /// <param name="si"></param>
-        /// <returns></returns>
-        ScriptOutput DoScriptFunction(ScriptInput si);
+        string ScriptUrl { get; set; }
     }
     /// <summary>
     /// 属性
     /// </summary>
     public abstract class IPropertyIt : INotifyPropertyChanged, IDisplayInterface
     {
+        /// <summary>
+        /// 属性变更
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
+        /// <summary>
+        /// 属性变更通知
+        /// </summary>
+        /// <param name="name"></param>
         protected void Changed(string name)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
-        private FrameworkElement uiMain = null;
         private ParaItemEnum pIEnum;
         private string name = "";
         private object value = null;
         private string id = Tools.CreateId();
-        private string child_id = Tools.CreateId();
         private string tipText = "";
         /// <summary>
         /// 图标
         /// </summary>
+        [JsonIgnore]
         public ImageSource LogoPath { get; set; }
         /// <summary>
         /// 属性类型
         /// </summary>
-        [ToJson(true)]
         public ParaItemEnum PIEnum
         {
             get
@@ -137,7 +120,6 @@ namespace TkScripts.Interface
         /// <summary>
         /// 属性名称
         /// </summary>
-        [ToJson(true)]
         public string Name
         {
             get
@@ -154,7 +136,6 @@ namespace TkScripts.Interface
         /// <summary>
         /// 当前值
         /// </summary>
-        [JsonIgnore]
         public object Value
         {
             get
@@ -180,25 +161,8 @@ namespace TkScripts.Interface
             }
         }
         /// <summary>
-        /// 主显示
-        /// </summary>
-        public FrameworkElement UIMain
-        {
-            get
-            {
-                return uiMain;
-            }
-
-            set
-            {
-                uiMain = value;
-                Changed("UIMain");
-            }
-        }
-        /// <summary>
         /// id
         /// </summary>
-        [ToJsonAttribute(true)]
         public string Id
         {
             get
@@ -213,26 +177,8 @@ namespace TkScripts.Interface
             }
         }
         /// <summary>
-        /// 子内容id
-        /// </summary>
-        [ToJsonAttribute(true)]
-        public string Child_id
-        {
-            get
-            {
-                return child_id;
-            }
-
-            set
-            {
-                child_id = value;
-                Changed("Child_id");
-            }
-        }
-        /// <summary>
         /// 提示文字
         /// </summary>
-        [ToJsonAttribute(true)]
         public string TipText
         {
             get
@@ -245,100 +191,6 @@ namespace TkScripts.Interface
                 tipText = value;
             }
         }
-
-        public Brush ForgeBrush
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public Brush BoxBrush
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        /// <summary>
-        /// 获取一个 属性获取框
-        /// </summary>
-        /// <returns></returns>
-        public virtual IItemBox GetGetPropertyBox()
-        {
-            IItemBox ibx = new ItemBox();
-            ibx.Id = this.Id;
-            ibx.Name = "获取" + this.name;
-            ibx.BoxType = ItemBoxEnum.GET;
-            ibx.TipText = "设置" + name + "属性的值";
-            IParatItem ipt = new ParatItem();
-            //ipt.Id = this.Child_id;
-            ipt.UIMain = UIMain;
-            ipt.Name = Name;
-            ipt.PIEnum = this.PIEnum;
-            ipt.ParentItemBox = ibx;
-            ipt.Value = value;
-            ibx.OutDatas.Add(ipt);
-            this.PropertyChanged += ibx.PropertyValueChanged;
-            return ibx;
-        }
-        /// <summary>
-        /// 获取设置属性的设置框
-        /// </summary>
-        /// <returns></returns>
-        public virtual IItemBox GetSetPropertyBox()
-        {
-            IItemBox ibx = new ItemBox();
-            ibx.Id = this.Id;
-            ibx.Name = "设置" + this.name;
-            ibx.BoxType = ItemBoxEnum.SET;
-            ibx.TipText = "设置" + name + "属性的值";
-            IParatItem ipt = new ParatItem();
-            ipt.Name = "输入";
-            ipt.PIEnum = ParaItemEnum.INPUT;
-            ipt.UIMain = UIMain;
-            ipt.ParentItemBox = ibx;
-            ibx.InputDatas.Add(ipt);
-
-            ipt = new ParatItem();
-            ipt.Name = "输出";
-            ipt.PIEnum = ParaItemEnum.OUTPUT;
-            ipt.UIMain = UIMain;
-            ipt.ParentItemBox = ibx;
-            ibx.OutDatas.Add(ipt);
-
-            ipt = new ParatItem();
-            ipt.UIMain = UIMain;
-            ipt.Name = Name;
-            ipt.Value = value;
-            ipt.PIEnum = this.PIEnum;
-            ipt.ParentItemBox = ibx;
-            //ipt.Id = this.Child_id;
-            ibx.InputDatas.Add(ipt);
-
-            ipt = new ParatItem();
-            ipt.UIMain = UIMain;
-            ipt.Name = Name;
-            ipt.Value = value;
-            ipt.PIEnum = this.PIEnum;
-            ipt.ParentItemBox = ibx;
-            //ipt.Id = this.Child_id;
-            ibx.OutDatas.Add(ipt);
-            this.PropertyChanged += ibx.PropertyValueChanged;
-            return ibx;
-        }
     }
     /// <summary>
     /// 参数项
@@ -350,20 +202,12 @@ namespace TkScripts.Interface
         private string tipText = "";
         private object value;
         private string name;
-        private IParatItem linkIParatItem = null;
         private IItemBox parentItemBox = null;
-        private SolidColorBrush sold = new SolidColorBrush(Colors.White);
-        private SolidColorBrush forgeBrush = new SolidColorBrush(Colors.Black);
         private List<string> enumDatas = null;
 
         /// <summary>
-        /// 计算LinkPosition相对点的面板
-        /// </summary>
-        private UIElement uiMain = null;
-        /// <summary>
         /// 参数的类型
         /// </summary>
-        [ToJsonAttribute(true)]
         public ParaItemEnum PIEnum
         {
             get
@@ -374,39 +218,6 @@ namespace TkScripts.Interface
             set
             {
                 pIEnum = value;
-                switch (PIEnum)
-                {
-                    case ParaItemEnum.INT:
-                        this.Color = Color.FromArgb(0xff, 0xcf, 0xcf, 0x24);
-                        break;
-                    case ParaItemEnum.FLOAT:
-                        this.Color = Color.FromArgb(0xff, 0x64, 0xc7, 0x27);
-                        break;
-                    case ParaItemEnum.BOOL:
-                        this.Color = Color.FromArgb(0xff, 0x27, 0xc7, 0xb9);
-                        break;
-                    case ParaItemEnum.STRING:
-                        this.Color = Color.FromArgb(0xff, 0x2c, 0x6b, 0xc7);
-                        break;
-                    case ParaItemEnum.DATETIME:
-                        this.Color = Color.FromArgb(0xff, 0xc7, 0x2c, 0x5d);
-                        break;
-                    case ParaItemEnum.OBJECT:
-                        this.Color = Color.FromArgb(0xff, 0xb6, 0x22, 0x0b);
-                        break;
-                    case ParaItemEnum.ENUM:
-                        this.Color = Color.FromArgb(0xff, 0x97, 0x0b, 0xb6);
-                        break;
-                    case ParaItemEnum.NULL:
-                        this.Color = Colors.Black;
-                        break;
-                    case ParaItemEnum.INPUT:
-                        break;
-                    case ParaItemEnum.OUTPUT:
-                        break;
-                    default:
-                        break;
-                }
                 if (PIEnum == ParaItemEnum.BOOL)
                 {
                     if (EnumDatas != null)
@@ -422,7 +233,6 @@ namespace TkScripts.Interface
         /// <summary>
         /// 参数的值
         /// </summary>
-        [ToJsonAttribute(true)]
         public object Value
         {
             get
@@ -439,7 +249,6 @@ namespace TkScripts.Interface
         /// <summary>
         /// 参数名称
         /// </summary>
-        [ToJsonAttribute(true)]
         public string Name
         {
             get
@@ -476,76 +285,6 @@ namespace TkScripts.Interface
             }
         }
         /// <summary>
-        /// 计算LinkPosition相对点的面板
-        /// </summary>
-        [JsonIgnore]
-        public UIElement UIMain
-        {
-            get
-            {
-                return uiMain;
-            }
-
-            set
-            {
-                uiMain = value;
-                Changed("UIMain");
-            }
-        }
-        /// <summary>
-        /// 颜色
-        /// </summary>
-        [JsonIgnore]
-        public Color Color
-        {
-            get
-            {
-                return sold.Color;
-            }
-
-            set
-            {
-                sold.Color = value;
-                Changed("Color");
-                Changed("BorderBrush");
-            }
-        }
-        /// <summary>
-        /// 颜色
-        /// </summary>
-        [JsonIgnore]
-        public Color ForgeColor
-        {
-            get
-            {
-                return forgeBrush.Color;
-            }
-
-            set
-            {
-                forgeBrush.Color = value;
-                Changed("ForgeColor");
-                Changed("ForgeBrush");
-            }
-        }
-        /// <summary>
-        /// 连接的对象
-        /// </summary>
-        [JsonIgnore]
-        public IParatItem LinkIParatItem
-        {
-            get
-            {
-                return linkIParatItem;
-            }
-
-            set
-            {
-                linkIParatItem = value;
-                Changed("LinkIParatItem");
-            }
-        }
-        /// <summary>
         /// 依存的函数体
         /// </summary>
         [JsonIgnore]
@@ -564,7 +303,6 @@ namespace TkScripts.Interface
         /// <summary>
         /// id
         /// </summary>
-        [ToJsonAttribute(true)]
         public string Id
         {
             get
@@ -581,7 +319,6 @@ namespace TkScripts.Interface
         /// <summary>
         /// 提示文字
         /// </summary>
-        [ToJson(true)]
         public string TipText
         {
             get
@@ -596,45 +333,9 @@ namespace TkScripts.Interface
             }
         }
 
-        Brush IDisplayInterface.ForgeBrush
-        {
-            get
-            {
-                return forgeBrush;
-            }
-
-            set
-            {
-                //forgeBrush = value;
-            }
-        }
-
-        Brush IDisplayInterface.BoxBrush
-        {
-            get
-            {
-                return sold;
-            }
-
-            set
-            {
-                
-            }
-        }
-
-        public ImageSource LogoPath
-        {
-            get
-            {
-                return parentItemBox.LogoPath;
-            }
-
-            set
-            {
-                parentItemBox.LogoPath = value;
-            }
-        }
-
+        /// <summary>
+        /// 属性改变通知
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
         /// <summary>
         /// 属性改变
@@ -651,14 +352,11 @@ namespace TkScripts.Interface
         public virtual IParatItem Clone()
         {
             IParatItem ip = (IParatItem)Activator.CreateInstance(GetType());
-
-            ip.Color = Color;
             ip.enumDatas = enumDatas;
             ip.name = name;
             ip.parentItemBox = parentItemBox;
             ip.value = value;
             ip.pIEnum = pIEnum;
-            ip.uiMain = uiMain;
             ip.TipText = TipText;
             return ip;
         }
@@ -669,11 +367,9 @@ namespace TkScripts.Interface
         public virtual void Copy(IParatItem parat)
         {
             this.enumDatas = parat.enumDatas;
-            this.linkIParatItem = parat.linkIParatItem;
             this.Name = parat.Name;
             this.PIEnum = parat.PIEnum;
             this.TipText = parat.TipText;
-            this.UIMain = parat.UIMain;
             this.Value = parat.Value;
         }
     }
@@ -682,6 +378,45 @@ namespace TkScripts.Interface
     /// </summary>
     public class ParatItem : IParatItem
     {
+        private IPropertyIt linkiProperty = null;
+        /// <summary>
+        /// 连接的属性id
+        /// </summary>
+        private string linkipropertyId = "";
+
+        /// <summary>
+        /// 属性
+        /// </summary>
+        [JsonIgnore]
+        public IPropertyIt LinkIProperty
+        {
+            get
+            {
+                return linkiProperty;
+            }
+
+            set
+            {
+                linkiProperty = value;
+                Changed("LinkIProperty");
+                Changed("LinkPropertyName");
+            }
+        }
+        /// <summary>
+        /// 连接的属性id
+        /// </summary>
+        public string LinkipropertyId
+        {
+            get
+            {
+                return linkiProperty != null ? linkiProperty.Id : linkipropertyId;
+            }
+
+            set
+            {
+                linkipropertyId = value;
+            }
+        }
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -708,19 +443,33 @@ namespace TkScripts.Interface
     /// </summary>
     public class ItemBox : IItemBox
     {
+        #region 属性
         private string id = Tools.CreateId();
         protected bool isHasBreakPoint = false;
         private string name = "";
         private string tipText = "";
-        private IScriptLayout scriptLayout = null;
-        private double thickness = 2;
+        private string parentNodeId = "";
         private ItemBoxEnum boxType = ItemBoxEnum.FUNCTION;
-        private SolidColorBrush forgeBrush = new SolidColorBrush(Colors.White);
-        private SolidColorBrush boxBrush = new SolidColorBrush(Colors.White);
-        private ObservableCollection<IParatItem> inputDatas = new ObservableCollection<IParatItem>();
-        private ObservableCollection<IParatItem> outputDatas = new ObservableCollection<IParatItem>();
+        private ObservableCollection<ParatItem> inputDatas = new ObservableCollection<ParatItem>();
+        private ObservableCollection<ParatItem> outputDatas = new ObservableCollection<ParatItem>();
         private ImageSource logoPath = ScriptHelp.FunctionImage;
-
+        /// <summary>
+        /// 是否显示
+        /// </summary>
+        private Visibility isVisiblity = Visibility.Visible;
+        /// <summary>
+        /// 是否扩展
+        /// </summary>
+        private bool isExpanded = false;
+        /// <summary>
+        /// 是否被选中
+        /// </summary>
+        private bool isSelected = false;
+        /// <summary>
+        /// 父节点
+        /// </summary>
+        private ItemBox parentNode = null; 
+        #endregion
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -733,9 +482,11 @@ namespace TkScripts.Interface
         {
             this.Id = Tools.CreateId();
         }
+        #region 访问器
         /// <summary>
         /// 图标路径
         /// </summary>
+        [JsonIgnore]
         public ImageSource LogoPath
         {
             get
@@ -748,11 +499,11 @@ namespace TkScripts.Interface
                 Changed("LogoPath");
             }
         }
-        
+
         /// <summary>
         /// 输入数据
         /// </summary>
-        public ObservableCollection<IParatItem> InputDatas
+        public ObservableCollection<ParatItem> InputDatas
         {
             get
             {
@@ -762,7 +513,7 @@ namespace TkScripts.Interface
         /// <summary>
         /// 输出数据列表
         /// </summary>
-        public ObservableCollection<IParatItem> OutDatas
+        public ObservableCollection<ParatItem> OutDatas
         {
             get
             {
@@ -772,7 +523,6 @@ namespace TkScripts.Interface
         /// <summary>
         /// 标题
         /// </summary>
-        [ToJson(true)]
         public string Name
         {
             get
@@ -786,58 +536,7 @@ namespace TkScripts.Interface
                 Changed("Name");
             }
         }
-        /// <summary>
-        /// 字体颜色
-        /// </summary>
-        [JsonIgnore]
-        public Brush ForgeBrush
-        {
-            get
-            {
-                return forgeBrush;
-            }
-            set
-            {
-                forgeBrush = (SolidColorBrush)value;
-                Changed("ForgeBrush");
-            }
-        }
-        /// <summary>
-        /// 字体颜色
-        /// </summary>
-        [JsonIgnore]
-        public Color ForgeColor
-        {
-            get
-            {
-                return forgeBrush.Color;
-            }
-            set
-            {
-                forgeBrush.Color = value;
-                Changed("ForgeColor");
-                Changed("ForgeBrush");
-            }
-        }
-        /// <summary>
-        /// 边框画刷
-        /// </summary>
-        [JsonIgnore]
-        public Brush BoxBrush
-        {
-            get
-            {
-                return boxBrush;
-            }
 
-            set
-            {
-                boxBrush = (SolidColorBrush)value;
-                Changed("BoxBrush");
-            }
-        }
-        
-        [ToJson(true)]
         public ItemBoxEnum BoxType
         {
             get
@@ -853,7 +552,6 @@ namespace TkScripts.Interface
         /// <summary>
         /// 提示文字
         /// </summary>
-        [ToJson(true)]
         public string TipText
         {
             get
@@ -867,24 +565,9 @@ namespace TkScripts.Interface
                 Changed("TipText");
             }
         }
-        [JsonIgnore]
-        public double Thickness
-        {
-            get
-            {
-                return thickness;
-            }
-
-            set
-            {
-                thickness = value;
-                Changed("Thickness");
-            }
-        }
         /// <summary>
         /// id
         /// </summary>
-        [ToJson(true)]
         public string Id
         {
             get
@@ -898,42 +581,10 @@ namespace TkScripts.Interface
                 Changed("Id");
             }
         }
-        /// <summary>
-        /// 脚本函数
-        /// </summary>
-        [JsonIgnore]
-        ScriptFunction IItemBox.ScriptFunction
-        {
-            get
-            {
-                return ScriptFunction;
-            }
 
-            set
-            {
-                ScriptFunction = value;
-            }
-        }
-        /// <summary>
-        /// 所属脚本
-        /// </summary>
-        [JsonIgnore]
-        public IScriptLayout ScriptLayout
-        {
-            get
-            {
-                return scriptLayout;
-            }
-
-            set
-            {
-                scriptLayout = value;
-            }
-        }
         /// <summary>
         /// 是否拥有断点
         /// </summary>
-        [ToJson(true)]
         public bool IsHasBreakPoint
         {
             get
@@ -947,15 +598,107 @@ namespace TkScripts.Interface
                 Changed("IsHasBreakPoint");
             }
         }
+        /// <summary>
+        /// 脚本url
+        /// </summary>
+        public string ScriptUrl { get; set; }
 
         /// <summary>
         /// 属性改变
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
         /// <summary>
-        /// 脚本函数
+        /// 子元素
         /// </summary>
-        public ScriptFunction ScriptFunction = null;
+        public ObservableCollection<ItemBox> Children { get; set; } = new ObservableCollection<ItemBox>();
+        /// <summary>
+        /// 父节点
+        /// </summary>
+        [JsonIgnore]
+        public ItemBox ParentNode
+        {
+            get
+            {
+                return parentNode;
+            }
+
+            set
+            {
+                parentNode = value;
+                Changed("ParentNode");
+            }
+        }
+
+        /// <summary>
+        /// 显示
+        /// </summary>
+        public Visibility IsVisiblity
+        {
+            get
+            {
+                return isVisiblity;
+            }
+
+            set
+            {
+                isVisiblity = value;
+                Changed("IsVisiblity");
+            }
+        }
+        /// <summary>
+        /// 是否展开
+        /// </summary>
+        public bool IsExpanded
+        {
+            get
+            {
+                return isExpanded;
+            }
+
+            set
+            {
+                isExpanded = value;
+                Changed("IsExpanded");
+            }
+        }
+        /// <summary>
+        /// 是否被选中
+        /// </summary>
+        public bool IsSelected
+        {
+            get
+            {
+                return isSelected;
+            }
+
+            set
+            {
+                isSelected = value;
+                Changed("IsSelected");
+            }
+        }
+        /// <summary>
+        /// 父节点的id
+        /// </summary>
+        public string ParentId
+        {
+            get
+            {
+                if(parentNode == null)
+                {
+                    return parentNodeId;
+                }
+                else
+                {
+                    return parentNode.Id;
+                }
+            }
+            set
+            {
+                this.parentNodeId = value;
+            }
+        }
+        #endregion
 
         /// <summary>
         /// 属性修改的名称
@@ -967,23 +710,14 @@ namespace TkScripts.Interface
         }
         
         /// <summary>
-        /// 执行函数
-        /// </summary>
-        /// <param name="si"></param>
-        /// <returns></returns>
-        public ScriptOutput DoScriptFunction(ScriptInput si)
-        {
-            return ScriptFunction?.Invoke(si);
-        }
-        /// <summary>
         /// 添加输入
         /// </summary>
         /// <param name="pitem"></param>
         public void AddInput(IParatItem pitem)
         {
+            ParatItem paratItem = pitem as ParatItem;
             pitem.ParentItemBox = this;
-            pitem.UIMain = this.scriptLayout;
-            this.InputDatas.Add(pitem);
+            this.InputDatas.Add(paratItem);
         }
         /// <summary>
         /// 添加输出
@@ -991,9 +725,9 @@ namespace TkScripts.Interface
         /// <param name="pitem"></param>
         public void AddOutput(IParatItem pitem)
         {
+            ParatItem paratItem = pitem as ParatItem;
             pitem.ParentItemBox = this;
-            pitem.UIMain = this.scriptLayout;
-            this.OutDatas.Add(pitem);
+            this.OutDatas.Add(paratItem);
         }
         /// <summary>
         /// 克隆一份
@@ -1004,12 +738,8 @@ namespace TkScripts.Interface
             //ItemBox ib = new ItemBox();
             ItemBox ib = (ItemBox)Activator.CreateInstance(GetType());
             ib.name = name;
-            ib.boxBrush = boxBrush;
             ib.tipText = tipText;
-            ib.Thickness = thickness;
             ib.BoxType = BoxType;
-            ib.forgeBrush = forgeBrush;
-            ib.ScriptFunction = ScriptFunction;
             foreach (var item in inputDatas)
             {
                 ib.AddInput(item.Clone());
@@ -1029,32 +759,25 @@ namespace TkScripts.Interface
         {
             //this.Id = box.Id;
             this.name = box.Name;
-            this.BoxBrush = box.BoxBrush;
             this.tipText = box.TipText;
-            this.Thickness = box.Thickness;
             this.BoxType = box.BoxType;
-            this.BoxBrush = box.ForgeBrush;
-            this.logoPath = box.LogoPath;
-            this.ScriptFunction = box.ScriptFunction;
             this.InputDatas.Clear();
+            this.ScriptUrl = box.ScriptUrl;
             this.OutDatas.Clear();
-            foreach (var item in box.InputDatas)
+            ObservableCollection<IParatItem> paratItems = box.GetInputParatItems();
+            foreach (var item in paratItems)
             {
                 this.AddInput(item.Clone());
             }
-            foreach (var item in box.OutDatas)
+            paratItems.Clear();
+            paratItems = box.GetOutputParatItems();
+            foreach (var item in paratItems)
             {
                 this.AddOutput(item.Clone());
             }
+            paratItems.Clear();
         }
-        /// <summary>
-        /// 克隆脚本函数将opbox的函数地址复制给此对象
-        /// </summary>
-        /// <param name="opbox"></param>
-        public void CloneScriptFunction(IItemBox opbox)
-        {
-            this.ScriptFunction = opbox.ScriptFunction;
-        }
+
         /// <summary>
         /// 熟悉改变事件
         /// </summary>
@@ -1089,15 +812,76 @@ namespace TkScripts.Interface
             }
         }
         /// <summary>
-        /// 设置脚本函数地址
+        /// 获取输入列表
         /// </summary>
-        /// <param name="sf"></param>
-        public void SetScriptFunction(ScriptFunction sf)
+        /// <returns></returns>
+        public ObservableCollection<IParatItem> GetInputParatItems()
         {
-            this.ScriptFunction = sf;
+            ObservableCollection<IParatItem> IParatItems = new ObservableCollection<IParatItem>();
+            foreach (var item in inputDatas)
+            {
+                IParatItems.Add(item as IParatItem);
+            }
+            return IParatItems;
+        }
+        /// <summary>
+        /// 获取输出列表
+        /// </summary>
+        /// <returns></returns>
+        public ObservableCollection<IParatItem> GetOutputParatItems()
+        {
+            ObservableCollection<IParatItem> IParatItems = new ObservableCollection<IParatItem>();
+            foreach (var item in outputDatas)
+            {
+                IParatItems.Add(item as IParatItem);
+            }
+            return IParatItems;
         }
 
-        
+        /// <summary>
+        /// 添加一个子元素
+        /// </summary>
+        /// <param name="stackItemBox"></param>
+        public void Add(ItemBox stackItemBox)
+        {
+            Children.Add(stackItemBox);
+            stackItemBox.ParentNode = this;
+        }
+        /// <summary>
+        /// 添加一个子元素
+        /// </summary>
+        /// <param name="stackItemBox"></param>
+        public void Add(ItemBox stackItemBox, int index)
+        {
+            Children.Insert(index, stackItemBox);
+            stackItemBox.ParentNode = this;
+        }
+
+        /// <summary>
+        /// 添加一个数组
+        /// </summary>
+        /// <param name="boxs"></param>
+        /// <param name="index"></param>
+        public void AddRange(ObservableCollection<ItemBox> boxs, int index)
+        {
+            foreach (var item in boxs)
+            {
+                item.ParentNode = this;
+                this.Children.Insert(index++, item);
+            }
+
+        }
+        /// <summary>
+        /// 删除一个代码块
+        /// </summary>
+        /// <param name="stackItemBox"></param>
+        public void Del(ItemBox stackItemBox)
+        {
+            if (Children.Contains(stackItemBox))
+            {
+                Children.Remove(stackItemBox);
+            }
+        }
     }
     /// <summary>
     /// 属性类

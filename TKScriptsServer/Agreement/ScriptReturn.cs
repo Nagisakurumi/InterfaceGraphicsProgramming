@@ -8,7 +8,7 @@ using System.IO;
 using Newtonsoft.Json.Linq;
 using System.Reflection;
 
-namespace TkScripts.Script
+namespace TKScriptsServer.Agreement
 {
     /// <summary>
     /// 脚本函数规范
@@ -27,14 +27,13 @@ namespace TkScripts.Script
     public class TaskScript : IDisposable
     {
         /// <summary>
+        /// 需要打印的日志信息
+        /// </summary>
+        public string LogMessage { get; set; }
+        /// <summary>
         /// 用于保存返回的结果
         /// </summary>
         public Dictionary<string, object> datas = new Dictionary<string, object>();
-        /// <summary>
-        /// 日志
-        /// </summary>
-        [JsonIgnore]
-        public WriteStreamCallBack WriteStream = null;
         /// <summary>
         /// 释放内存
         /// </summary>
@@ -45,7 +44,6 @@ namespace TkScripts.Script
                 datas.Clear();
             }
             datas = null;
-            WriteStream = null;
         }
 
         /// <summary>
@@ -115,7 +113,7 @@ namespace TkScripts.Script
         /// <param name="log"></param>
         public void Write(string log)
         {
-            WriteStream?.Invoke(log);
+            this.LogMessage += log;
         }
     }
 
@@ -143,6 +141,7 @@ namespace TkScripts.Script
                 isExecption = value;
             }
         }
+        
     }
     /// <summary>
     /// 参数
@@ -154,7 +153,7 @@ namespace TkScripts.Script
     /// <summary>
     /// 属性映射类
     /// </summary>
-    public struct DataContext
+    public class DataContext
     {
         /// <summary>
         /// 参数名称
@@ -201,7 +200,6 @@ namespace TkScripts.Script
         /// 所有类型
         /// </summary>
         private Dictionary<string, Type> types = new Dictionary<string, Type>();
-
         /// <summary>
         /// 描述
         /// </summary>
@@ -214,6 +212,17 @@ namespace TkScripts.Script
         /// 代码块类型
         /// </summary>
         public ItemBoxEnum ItemBoxEnum = ItemBoxEnum.FUNCTION;
+        /// <summary>
+        /// 地址
+        /// </summary>
+        public string Url = "";
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public ScriptMethAttribute()
+        {
+
+        }
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -317,12 +326,12 @@ namespace TkScripts.Script
         /// <summary>
         /// 输入参数
         /// </summary>
-        public List<DataContext> InputData { get; } = new List<DataContext>();
+        public List<DataContext> InputData { get; set; } = new List<DataContext>();
 
         /// <summary>
         /// 输出参数
         /// </summary>
-        public List<DataContext> OutputData { get; } = new List<DataContext>();
+        public List<DataContext> OutputData { get; set; } = new List<DataContext>();
 
         /// <summary>
         /// 获取枚举列表

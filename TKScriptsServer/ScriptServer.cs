@@ -10,13 +10,14 @@ using System.IO;
 using TKScriptsServer.API;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json.Linq;
+using TKScriptsServer.Agreement;
 
 namespace TKScriptsServer
 {
     /// <summary>
     /// 脚本服务器
     /// </summary>
-    public class ScriptServer
+    internal class ScriptServer
     {
         /// <summary>
         /// 消息队列锁
@@ -159,20 +160,15 @@ namespace TKScriptsServer
                 //string message = System.Text.Encoding.UTF8.GetString(datas);
                 //datas = null;
                 string values = System.Text.Encoding.UTF8.GetString(memoryStream.ToArray());
-                Dictionary<string, string> valuePairs = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(values);
+                ScriptInput valuePairs = Newtonsoft.Json.JsonConvert.DeserializeObject<ScriptInput>(values);
                 
-                //JObject jObject = (JObject)Newtonsoft.Json.JsonConvert.SerializeObject(values);
-                //foreach (var item in jObject)
-                //{
-                //    valuePairs.Add(item.Key, item.Value.ToString());
-                //}
                 return new RequestMsg() { Stream = memoryStream.ToArray(), HttpMode = HttpMode.POST,
                 ApiName = request.RawUrl.Substring(1, request.RawUrl.Length - 1), ValuePairs = valuePairs,};
             }
             else if(request.HttpMethod.Equals("GET"))
             {
                 Match para = new Regex("/(.*?)\\?(.*)").Match(request.RawUrl);
-                Dictionary<string, string> valuePairs = new Dictionary<string, string>();
+                Dictionary<string, object> valuePairs = new Dictionary<string, object>();
                 string[] values = para.Groups[2].Value.Split('&');
                 foreach (var item in values)
                 {
@@ -186,7 +182,7 @@ namespace TKScriptsServer
                 {
                     apiName = request.RawUrl.Substring(1);
                 }
-                return new RequestMsg() { ApiName = apiName, ValuePairs = valuePairs, HttpMode = HttpMode.GET };
+                return new RequestMsg() { ApiName = apiName, ValuePairs = new ScriptInput() { datas = valuePairs,}, HttpMode = HttpMode.GET };
             }
             return null;
         }

@@ -27,8 +27,11 @@ namespace TkScripts.ScriptLayout.StackingLayout
         /// <summary>
         /// 参数
         /// </summary>
-        private StackParatItem paramter = null;
+        private ParatItem paramter = null;
         #endregion
+        /// <summary>
+        /// 构造函数
+        /// </summary>
         public StackOutput()
         {
             InitializeComponent();
@@ -42,10 +45,14 @@ namespace TkScripts.ScriptLayout.StackingLayout
         {
             propertyCombox.ItemsSource = ips;
             propertyCombox.DisplayMemberPath = "Name";
-            output.DataContext = ip;
-            output.InitParatItemLayout();
+            //output.DataContext = ip;
+            //output.InitParatItemLayout();
             this.DataContext = ip;
-            paramter = ip as StackParatItem;
+            paramter = ip as ParatItem;
+            if(paramter.LinkIProperty != null)
+            {
+                this.isopen.IsChecked = true;
+            }
         }
         /// <summary>
         /// 取消选择

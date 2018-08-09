@@ -14,11 +14,11 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Border Grid.Column="0">
+        <Border Grid.Column="0" ToolTip="{Binding Path=TipText}">
             <TextBlock VerticalAlignment="Center" Name="nameContent" Text="{Binding Path=Name}"></TextBlock>
         </Border>
         <GridSplitter Grid.Column="1"></GridSplitter>
-        <CheckBox Content="是否采用属性" Grid.Column="2" VerticalAlignment="Center" Name="isopen" Unchecked="isopen_Unchecked" VerticalContentAlignment="Center"></CheckBox>
+        <CheckBox Content="是否使用变量" Grid.Column="2" VerticalAlignment="Center" Name="isopen" Unchecked="isopen_Unchecked" VerticalContentAlignment="Center"></CheckBox>
         <ComboBox Grid.Column="3" VerticalAlignment="Center" VerticalContentAlignment="Center" SelectedItem="{Binding Path=LinkIProperty}"
                       HorizontalContentAlignment="Center" Name="propertyCombox" IsEnabled="{Binding ElementName=isopen,Path=IsChecked}"></ComboBox>
         <Border Name="content" Grid.Column="4" Margin="5, 0, 0, 0">

@@ -105,6 +105,7 @@
       <DependentUpon>ScriptItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="ScriptManage\ManagerPlugin\TaskItem.cs" />
+    <Compile Include="ScriptManage\ScriptConfig.cs" />
     <Compile Include="ScriptManage\ScriptIntegrationForOne.xaml.cs">
       <DependentUpon>ScriptIntegrationForOne.xaml</DependentUpon>
     </Compile>
@@ -114,6 +115,7 @@
     <Compile Include="SystemLogBox.xaml.cs">
       <DependentUpon>SystemLogBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Tools.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -163,6 +165,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TKScriptsServer\TKScriptsServer.csproj">
+      <Project>{26a7106d-c1f4-405c-ba89-f81053d35ecf}</Project>
+      <Name>TKScriptsServer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TkScripts\TkScripts.csproj">
       <Project>{B6B2704A-CF50-4563-ADC1-65B018303E40}</Project>
       <Name>TkScripts</Name>

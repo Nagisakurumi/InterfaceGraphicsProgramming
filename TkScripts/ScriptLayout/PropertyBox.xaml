@@ -4,24 +4,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TkScripts.ScriptLayout"
-             mc:Ignorable="d" KeyDown="UserControl_KeyDown" Background="White"
+             mc:Ignorable="d" Background="#FF9C9CEC" Width="280"
              >
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="4"></RowDefinition>
-        </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" HorizontalAlignment="Center" Orientation="Horizontal" Margin="1">
-            <TextBlock Text="名称:"  HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
-            <TextBox  Name="content" Text="{Binding Path=Name,Mode=TwoWay}" IsReadOnly="True"  Background="{x:Null}" BorderThickness="0"  LostFocus="TextBox_LostFocus" KeyDown="TextBox_KeyDown"></TextBox>
-            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="类型:"  Margin="5, 0, 0, 0"></TextBlock>
-            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Path=PIEnum}" ></TextBlock>
-        </StackPanel>
-        <DockPanel Grid.Row="1" HorizontalAlignment="Center" Margin="1">
-            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="当前值:" ></TextBlock>
-            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="100" Text="{Binding Path=Value}" ></TextBlock>
-        </DockPanel>
-        <Border Grid.Row="2" BorderBrush="White" BorderThickness="3"></Border>
-    </Grid>
+    <StackPanel Grid.Row="0" VerticalAlignment="Center" Orientation="Horizontal" Margin="1">
+        <TextBlock Text="名称:"  HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+        <TextBox VerticalContentAlignment="Center" KeyDown="TextBox_KeyDown"  Name="content" Text="{Binding Path=Name,Mode=TwoWay}" IsReadOnly="True" Width="80" ></TextBox>
+        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="当前值:" ></TextBlock>
+        <TextBox VerticalContentAlignment="Center" KeyDown="TextBox_KeyDown"  Name="valuecontent" Width="80" HorizontalAlignment="Center" VerticalAlignment="Center" IsReadOnly="True" MaxWidth="100" Text="{Binding Path=Value,Mode=TwoWay}" ></TextBox>
+        <Border  BorderBrush="White" BorderThickness="1" Margin="2" Cursor="Hand" MouseDown="Border_MouseDown">
+            <TextBlock Text="修改信息" FontSize="10" VerticalAlignment="Center" ></TextBlock>
+        </Border>
+    </StackPanel>
 </UserControl>

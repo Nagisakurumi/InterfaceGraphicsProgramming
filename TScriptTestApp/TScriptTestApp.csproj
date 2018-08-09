@@ -9,11 +9,12 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TScriptTestApp</RootNamespace>
     <AssemblyName>TScriptTestApp</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -61,6 +62,14 @@
     <Reference Include="AvalonDock.Themes.VS2010">
       <HintPath>..\TKScripts.Manager\AvalonDock.Themes.VS2010.dll</HintPath>
     </Reference>
+    <Reference Include="LogLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\我的类库\LogLib\bin\x64\Debug\LogLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files\Microsoft SDKs\Azure\.NET SDK\v2.9\bin\plugins\Diagnostics\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -83,25 +92,25 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="MainLayout2.xaml">
+    <Compile Include="SetUrl.xaml.cs">
+      <DependentUpon>SetUrl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tools.cs" />
+    <Page Include="ScriptWrite.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainLayout2.xaml.cs">
-      <DependentUpon>MainLayout2.xaml</DependentUpon>
+    <Compile Include="ScriptWrite.xaml.cs">
+      <DependentUpon>ScriptWrite.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+    <Page Include="SetUrl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -131,17 +140,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ControlDevice\ControlDevice.csproj">
-      <Project>{09107059-40f1-480b-ac83-dff94c2398bc}</Project>
-      <Name>ControlDevice</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MyControls\MyControls.csproj">
-      <Project>{EDFE1718-37D8-4EDA-9C4D-A42FB7CBD760}</Project>
-      <Name>MyControls</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TKScripts.Manager\TKScripts.Manager.csproj">
       <Project>{d218e160-c6a8-4b54-9cc1-e1eb78199150}</Project>
       <Name>TKScripts.Manager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TKScriptsServer\TKScriptsServer.csproj">
+      <Project>{26A7106D-C1F4-405C-BA89-F81053D35ECF}</Project>
+      <Name>TKScriptsServer</Name>
     </ProjectReference>
     <ProjectReference Include="..\TkScripts\TkScripts.csproj">
       <Project>{b6b2704a-cf50-4563-adc1-65b018303e40}</Project>

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using TkScripts.Interface;
+using TKScriptsServer.Agreement;
 
 namespace TkScripts.Reflexui
 {

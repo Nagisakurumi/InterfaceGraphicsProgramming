@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TkScripts
+namespace TKScriptsServer.Agreement
 {
 
     public enum ItemBoxEnum : int

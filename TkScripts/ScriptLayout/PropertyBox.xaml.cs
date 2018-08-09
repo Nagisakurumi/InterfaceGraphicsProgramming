@@ -26,32 +26,22 @@ namespace TkScripts.ScriptLayout
         }
     
 
-        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            content.IsReadOnly = true;
-            content.BorderThickness = new Thickness(0);
-            content.Background = null;
-        }
 
         private void TextBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
                 content.IsReadOnly = true;
-                content.BorderThickness = new Thickness(0);
-                content.Background = null;
+                valuecontent.IsReadOnly = true;
             }
         }
 
-        private void UserControl_KeyDown(object sender, KeyEventArgs e)
+
+
+        private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if(e.Key == Key.F2)
-            {
-                content.IsReadOnly = false;
-                content.BorderThickness = new Thickness(1);
-                content.Background = new SolidColorBrush(Colors.White);
-                content.Focus();
-            }
+            content.IsReadOnly = false;
+            valuecontent.IsReadOnly = false;
         }
     }
 }

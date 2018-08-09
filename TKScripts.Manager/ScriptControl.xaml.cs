@@ -79,7 +79,7 @@ namespace TKScripts.Manager
         /// </summary>
         public event ItemEvent ItemAddEvent = null;
         /// <summary>
-        /// 脚本创建回调
+        /// 脚本移除回调
         /// </summary>
         public event ItemEvent ItemRemoveEvent = null;
         /// <summary>
@@ -89,14 +89,14 @@ namespace TKScripts.Manager
         /// <summary>
         /// 脚本列表
         /// </summary>
-        private ObservableCollection<IScriptLayout> scripts = new ObservableCollection<IScriptLayout>();
+        private ObservableCollection<StackingMainLayout> scripts = new ObservableCollection<StackingMainLayout>();
 
         #endregion
         #region 访问器
         /// <summary>
         /// 脚本列表
         /// </summary>
-        public ObservableCollection<IScriptLayout> Scripts
+        public ObservableCollection<StackingMainLayout> Scripts
         {
             get
             {
@@ -115,7 +115,7 @@ namespace TKScripts.Manager
         /// 添加一个脚本
         /// </summary>
         /// <param name="script"></param>
-        public void AddScript(IScriptLayout script)
+        public void AddScript(StackingMainLayout script)
         {
             if(Scripts.Contains(script) == false)
             {
@@ -127,19 +127,21 @@ namespace TKScripts.Manager
         /// 添加一个脚本
         /// </summary>
         /// <param name="script"></param>
-        public IScriptLayout AddScript()
+        public StackingMainLayout AddScript()
         {
-            IScriptLayout script = new StackingMainLayout();
+            IScriptLayout script = new IScriptLayout();
             script.ScriptName = GetScriptName();
-            Scripts.Add(script);
-            ItemAddEvent?.Invoke(script);
-            return script;
+            StackingMainLayout stackingMainLayout = StackingMainLayout.InstanceStackingMainLayout(script);
+            Scripts.Add(stackingMainLayout);
+
+            ItemAddEvent?.Invoke(stackingMainLayout);
+            return stackingMainLayout;
         }
         /// <summary>
         /// 删除一个脚本
         /// </summary>
         /// <param name="script"></param>
-        public void DelScript(IScriptLayout script)
+        public void DelScript(StackingMainLayout script)
         {
             if (Scripts.Contains(script) == true)
             {
@@ -153,7 +155,7 @@ namespace TKScripts.Manager
         public void RemoveAll()
         {
             if (Scripts.Count == 0) return;
-            IScriptLayout script = Scripts.First();
+            StackingMainLayout script = Scripts.First();
             while (script != null)
             {
                 DelScript(script);
@@ -183,7 +185,7 @@ namespace TKScripts.Manager
         {
             if(scriptList.SelectedItem != null)
             {
-                DelScript(scriptList.SelectedItem as IScriptLayout);
+                DelScript(scriptList.SelectedItem as StackingMainLayout);
             }
         }
 

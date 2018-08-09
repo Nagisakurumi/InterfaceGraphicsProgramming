@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using TkScripts.Script;
+using TKScriptsServer.Agreement;
 
 namespace TKScriptsServer.API
 {
@@ -47,6 +47,7 @@ namespace TKScriptsServer.API
             {
                 ScriptMethAttribute.Name = minfo.Name;
             }
+            ScriptMethAttribute.Url = this.Url;
         }
     }
 }

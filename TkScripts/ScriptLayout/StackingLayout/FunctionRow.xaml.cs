@@ -56,16 +56,14 @@ namespace TkScripts.ScriptLayout.StackingLayout
         public override void InitFunction()
         {
             if (ibox != null) return;
-            ibox = this.DataContext as IItemBox;
+            ibox = this.DataContext as ItemBox;
             if (ibox == null) return;
             foreach (var item in Ibox.InputDatas)
             {
-                item.UIMain = this.UIMain;
                 AddInputData(item);
             }
             foreach (var item in Ibox.OutDatas)
             {
-                item.UIMain = this.UIMain;
                 AddOutputData(item);
             }
             Ibox.InputDatas.CollectionChanged += InputDatas_CollectionChanged;

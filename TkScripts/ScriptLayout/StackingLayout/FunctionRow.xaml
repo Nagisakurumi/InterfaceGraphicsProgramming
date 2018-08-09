@@ -10,7 +10,7 @@
     <interface:IFunctionBox.Resources>
         <th:VisiableAndIsHasStopPoint x:Key="haspointchange"></th:VisiableAndIsHasStopPoint>
     </interface:IFunctionBox.Resources>
-    <Border BorderThickness="1" BorderBrush="{Binding Path=BoxBrush}" CornerRadius="5"
+    <Border  CornerRadius="5" BorderThickness="2" BorderBrush="#FFEEE054"
             >
         <Grid>
             <Grid.RowDefinitions>

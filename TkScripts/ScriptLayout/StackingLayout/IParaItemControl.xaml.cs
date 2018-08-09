@@ -23,6 +23,12 @@ namespace TkScripts.ScriptLayout.StackingLayout
     public partial class IParaItemControl : UserControl
     {
 
+        /// <summary>
+        /// 脚本对象
+        /// </summary>
+        public static readonly DependencyProperty ScriptLayoutProperty = DependencyProperty.Register
+            ("ScriptLayout", typeof(IScriptLayout), typeof(IParaItemControl));
+
         private IParatItem source = null;
         /// <summary>
         /// 是否作为输入的参数框
@@ -53,7 +59,18 @@ namespace TkScripts.ScriptLayout.StackingLayout
                 isAsInput = value;
             }
         }
+        /// <summary>
+        /// 脚本源
+        /// </summary>
+        public IScriptLayout ScriptLayout
+        {
+            get { return (IScriptLayout)GetValue(ScriptLayoutProperty); }
+            set { SetValue(ScriptLayoutProperty, value); }
+        }
 
+        /// <summary>
+        /// 构造函数
+        /// </summary>
         public IParaItemControl()
         {
             InitializeComponent();
@@ -84,10 +101,10 @@ namespace TkScripts.ScriptLayout.StackingLayout
                 }
             }
 
-            this.propertyCombox.ItemsSource = source.ParentItemBox.ScriptLayout.IPropertys;
+            this.propertyCombox.ItemsSource = ScriptLayout.IPropertys;
             this.propertyCombox.DisplayMemberPath = "Name";
-            if((source as StackParatItem) != null &&
-                (source as StackParatItem).LinkIProperty != null)
+            if ((source as ParatItem) != null &&
+                (source as ParatItem).LinkIProperty != null)
             {
                 isopen.IsChecked = true;
             }
@@ -105,7 +122,7 @@ namespace TkScripts.ScriptLayout.StackingLayout
         private void isopen_Unchecked(object sender, RoutedEventArgs e)
         {
             if (source == null) return;
-            (source as StackParatItem).LinkIProperty = null;
+            (source as ParatItem).LinkIProperty = null;
         }
     }
 }

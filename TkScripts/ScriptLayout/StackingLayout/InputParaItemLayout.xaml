@@ -10,14 +10,14 @@
         <Border.ToolTip>
             <TextBlock Name="tip" Text="{Binding Path=TipText}"></TextBlock>
         </Border.ToolTip>
-        <StackPanel Orientation="Horizontal">
+        <!--<StackPanel Orientation="Horizontal">
             <Border Width="{Binding ElementName=main,Path=ActualHeight}" Name="cricle"
                     Height="{Binding ElementName=main,Path=ActualHeight}"
-                    BorderThickness="3" BorderBrush="{Binding Path=BorderBrush}" CornerRadius="{Binding ElementName=main,Path=Radius}" Background="#00F9F9F9"/>
+                    BorderThickness="3" BorderBrush="{Binding Path=BorderBrush}" CornerRadius="{Binding ElementName=main,Path=Radius}" Background="#00F9F9F9"/>-->
             <StackPanel Orientation="Horizontal" Name="inputContent" Margin="10, 0, 0, 0">
                 <TextBlock Foreground="{Binding Path=ForgeBrush}" Text="{Binding Path=Name}" Margin="0, 0, 10, 0" VerticalAlignment="Center"></TextBlock>
                 
             </StackPanel>
-        </StackPanel>
+        <!--</StackPanel>-->
     </Border>
 </local:MLParatItemLayout>

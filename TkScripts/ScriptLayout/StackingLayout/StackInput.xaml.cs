@@ -32,7 +32,7 @@ namespace TkScripts.ScriptLayout.StackingLayout
         /// <summary>
         /// 参数
         /// </summary>
-        private StackParatItem paramter = null;
+        private ParatItem paramter = null;
         #endregion
         #region 访问器
 
@@ -60,10 +60,10 @@ namespace TkScripts.ScriptLayout.StackingLayout
                 propertyCombox.SelectedIndex = 0;
             }
 
-            input.DataContext = ip;
-            input.InitParatItemLayout();
+            //input.DataContext = ip;
+            //input.InitParatItemLayout();
             this.DataContext = ip;
-            paramter = ip as StackParatItem;
+            paramter = ip as ParatItem;
         }
         /// <summary>
         /// 取消选择事件

@@ -15,6 +15,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TkScripts;
 using TkScripts.Interface;
+using TkScripts.ScriptLayout.StackingLayout;
+using TKScriptsServer.Agreement;
 
 namespace TKScripts.Manager
 {
@@ -32,7 +34,7 @@ namespace TKScripts.Manager
         /// <summary>
         /// 脚本对象
         /// </summary>
-        private IScriptLayout script = null;
+        private StackingMainLayout script = null;
         /// <summary>
         /// 创建属性事件
         /// </summary>
@@ -45,7 +47,7 @@ namespace TKScripts.Manager
         /// 设置数据源
         /// </summary>
         /// <param name="script"></param>
-        public void SetIScriptLayout(IScriptLayout script)
+        public void SetIScriptLayout(StackingMainLayout script)
         {
             this.script = script;
             this.propertysList.ItemsSource = this.script.IPropertys;
@@ -123,25 +125,6 @@ namespace TKScripts.Manager
             pit.Value = DateTime.Now;
             if (CreateIPropertyEvent != null)
                 pit = CreateIPropertyEvent?.Invoke(pit, ParaItemEnum.DATETIME);
-            if (pit != null)
-            {
-                script.Add(pit);
-            }
-        }
-        /// <summary>
-        /// 创建对象
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void CreateObject_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (script == null) return;
-            IPropertyIt pit = new PropertyIt();
-            pit.PIEnum = ParaItemEnum.OBJECT;
-            pit.Name = getPropertyName();
-            pit.Value = 0;
-            if (CreateIPropertyEvent != null)
-                pit = CreateIPropertyEvent?.Invoke(pit, ParaItemEnum.OBJECT);
             if (pit != null)
             {
                 script.Add(pit);
