@@ -58,6 +58,9 @@ namespace TKScripts.Manager
                 DebugItem.GetPropertyWatchForObject(baseitem);
             }), watchobject, watchname);
         }
-        
+        /// <summary>
+        /// 控件key
+        /// </summary>
+        public string ControlKey { get; internal set; }
     }
 }

@@ -9,7 +9,7 @@
              d:DesignHeight="300" Width="520">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100"></ColumnDefinition>
+            <ColumnDefinition Width="200"></ColumnDefinition>
             <ColumnDefinition Width="2"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
@@ -29,19 +29,22 @@
                 <RowDefinition Height="2"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
-            <DockPanel Grid.Row="0">
+            <DockPanel Grid.Row="0" Margin="5">
                 <TextBlock DockPanel.Dock="Top" Text="脚本列表" HorizontalAlignment="Center"
                            VerticalAlignment="Center" Foreground="White"></TextBlock>
                 <ListBox DockPanel.Dock="Bottom" Name="scripts" MouseMove="Script_Move" MouseDown="Script_Down">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-
+                            <Border>
+                                <TextBlock Text="{Binding ScriptName}" VerticalAlignment="Center"
+                                           HorizontalAlignment="Center"></TextBlock>
+                            </Border>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
             </DockPanel>
             <GridSplitter Grid.Row="1"></GridSplitter>
-            <Grid Grid.Row="2">
+            <Grid Grid.Row="2" Margin="5">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30"></RowDefinition>
                     <RowDefinition Height="30"></RowDefinition>
@@ -49,12 +52,23 @@
                 </Grid.RowDefinitions>
                 <TextBlock Text="任务列表" Grid.Row="0" HorizontalAlignment="Center"
                            VerticalAlignment="Center"  Foreground="White"></TextBlock>
-                <StackPanel Grid.Row="1" Orientation="Horizontal" Background="White">
-                    <Button Content="创建任务" Click="Create_Task"></Button>
-                    <Button Content="删除选中任务" Click="Remove_Task"></Button>
-                </StackPanel>
-                <ListBox  Name="tasks" Grid.Row="2">
-
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Button Content="创建任务" Click="Create_Task" ></Button>
+                    <Button Content="删除选中任务" Click="Remove_Task" Grid.Column="1"></Button>
+                </Grid>
+                <ListBox  Name="tasks" Grid.Row="2" SelectionChanged="tasks_SelectionChanged">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border>
+                                <TextBlock Text="{Binding Name}" VerticalAlignment="Center"
+                                           HorizontalAlignment="Center"></TextBlock>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
                 </ListBox>
             </Grid>
         </Grid>
@@ -62,7 +76,7 @@
         <Grid Grid.Column="2" Grid.Row="1">
             <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="132"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
                     <RowDefinition Height="2"></RowDefinition>
                     <RowDefinition Height="131"/>
                 </Grid.RowDefinitions>
@@ -74,7 +88,7 @@
                                VerticalAlignment="Center" HorizontalAlignment="Center"></Image>
                                 <TextBlock Text="{Binding Path=ScriptName,Mode=TwoWay}" VerticalAlignment="Stretch" 
                                   Name="scriptName" 
-                                 Background="{x:Null}"  Grid.Column="1" Margin="10, 0, 0, 0"></TextBlock>
+                                   Grid.Column="1" Margin="10, 0, 0, 0"></TextBlock>
                             </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>

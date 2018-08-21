@@ -100,7 +100,8 @@ namespace TkScripts.Agreement
             return so;
         }
         [ScriptMeth("{'parameter':[" +
-            "{'name':'obj','type':'OBJECT','defult':'','enumdatas':'','tiptext':'数组'}" +
+            "{'name':'obj','type':'OBJECT','defult':'','enumdatas':'','tiptext':'对象'}," +
+            "{'name':'message','type':'STRING','defult':'','enumdatas':'','tiptext':'文本'}" +
             "]}",
             "",
             "输出对象", functionName: "打印日志")]
@@ -108,7 +109,11 @@ namespace TkScripts.Agreement
         {
             ScriptOutput scriptOutput = new ScriptOutput();
             object obj = si.GetValue("obj") as object;
-            scriptOutput.Write(obj.ToString());
+            string message = si.GetValue("message").ToString();
+            string content = "";
+            content += obj == null ? "" : obj.ToString();
+            content += message;
+            scriptOutput.Write(content);
             return scriptOutput;
         }
         [ScriptMeth("{'parameter':[" +

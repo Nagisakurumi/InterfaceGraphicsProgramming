@@ -84,6 +84,7 @@ namespace TKScripts.Manager.ScriptManage
             IScriptLayout scriptLayout = e.Data.GetData(typeof(IScriptLayout)) as IScriptLayout;
             (tasks.SelectedItem as ScriptTask).TaskItems.Add(new TaskItem() { ScriptLayout = scriptLayout
             , Times = 0, });
+
         }
 
         /// <summary>
@@ -117,11 +118,11 @@ namespace TKScripts.Manager.ScriptManage
                     scriptLayout.ComipleMessageCall += logBox.WritLog;
                     ScriptLayouts.Add(scriptLayout);
                 }
-                ///加载任务
-                if(System.IO.File.Exists(System.IO.Path.Combine(projectPath + "projectTask.task")))
+                //加载任务
+                if(System.IO.File.Exists(System.IO.Path.Combine(projectPath, "projectTask.task")))
                 {
                     ObservableCollection<ScriptTask> scriptTasks = Newtonsoft.Json.JsonConvert.
-                        DeserializeObject<ObservableCollection<ScriptTask>>(System.IO.Path.Combine(projectPath + "projectTask.task")
+                        DeserializeObject<ObservableCollection<ScriptTask>>(System.IO.Path.Combine(projectPath, "projectTask.task")
                         .GetStringFromFile());
                     foreach (var listitem in scriptTasks)
                     {
@@ -253,6 +254,16 @@ namespace TKScripts.Manager.ScriptManage
                 name = name + i.ToString();
             }
             return name;
+        }
+        /// <summary>
+        /// 选项改变的事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void tasks_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (tasks.SelectedItem == null) return;
+            taskItem.ItemsSource = (tasks.SelectedItem as ScriptTask).TaskItems;
         }
     }
 }

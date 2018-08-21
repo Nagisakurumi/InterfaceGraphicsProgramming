@@ -88,6 +88,8 @@ namespace TKScripts.Manager
             documentPane.Children.Add(layout);
             return layout;
         }
+
+
         /// <summary>
         /// 添加内容面板
         /// </summary>
@@ -100,6 +102,9 @@ namespace TKScripts.Manager
             pane.Children.Add(anchorable);
             return anchorable;
         }
+
+
+
         /// <summary>
         /// 添加一个控件
         /// </summary>
@@ -295,13 +300,50 @@ namespace TKScripts.Manager
         {
             if (userControlExtend.ContainsKey(key))
             {
-                if(ShowPane(userControlExtend[key].Element) == false)
+                UserControlExtend userControl = userControlExtend[key];
+                if(layoutContents[userControl.Layout].Parent == null)
+                {
+                    switch (userControl.Layout)
+                    {
+                        case Layout.LeftUp:
+                            LeftAnchorableGroup.Children.Add(LeftUpPaneGroup);
+                            break;
+                        case Layout.LeftDown:
+                            LeftAnchorableGroup.Children.Add(LeftDownPaneGroup);
+                            break;
+                        case Layout.Right:
+                            RightAnchorableGroup.Children.Add(RightPaneGroup);
+                            break;
+                        case Layout.Buttom:
+                            ButtonAnchorableGroup.Children.Add(ButtonPanelGroup);
+                            break;
+                        case Layout.Content:
+                            MainParent.Children.Add(MainDocument);
+                            break;
+                        case Layout.TopSide:
+                            TopSideParent.Children.Add(TopSideGroup);
+                            break;
+                        case Layout.LeftSide:
+                            LeftSideParent.Children.Add(LeftSideGroup);
+                            break;
+                        case Layout.RightSide:
+                            RightSideParent.Children.Add(RightSideGroup);
+                            break;
+                        case Layout.ButtomSide:
+                            ButtomSideParent.Children.Add(ButtomSideGroup);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                if (ShowPane(userControl.Element) == false)
                 {
                     if(IsContains(userControlExtend[key].Element, userControlExtend[key].Layout) == false)
                     {
                         AddUserControl(userControlExtend[key]);
                     }
                 }
+
             }
         }
         /// <summary>

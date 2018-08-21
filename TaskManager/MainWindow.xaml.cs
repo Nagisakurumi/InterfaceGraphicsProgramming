@@ -13,18 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TKScripts.Manager
+namespace TaskManager
 {
     /// <summary>
-    /// FunctionParaItemList.xaml 的交互逻辑
+    /// MainWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class FunctionParaItemList : UserControl
+    public partial class MainWindow : Window
     {
-        /// <summary>
-        /// 控件key
-        /// </summary>
-        public string ControlKey { get; internal set; }
-        public FunctionParaItemList()
+        public MainWindow()
         {
             InitializeComponent();
         }

@@ -39,6 +39,10 @@ namespace TKScripts.Manager
         /// 创建属性事件
         /// </summary>
         public CreateIPropertyEventCallBack CreateIPropertyEvent = null;
+        /// <summary>
+        /// 控件key
+        /// </summary>
+        public string ControlKey { get; internal set; }
         public PropertyItControl()
         {
             InitializeComponent();

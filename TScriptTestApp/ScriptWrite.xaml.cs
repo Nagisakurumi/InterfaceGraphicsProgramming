@@ -47,7 +47,26 @@ namespace TScriptTestApp
         /// <param name="e"></param>
         private void ScriptWrite_Loaded(object sender, RoutedEventArgs e)
         {
-
+            Controls.Add("property", "属性窗口");
+            Controls.Add("paraItem", "参数窗口");
+            Controls.Add("script", "脚本窗口");
+            Controls.Add("logBox", "日志窗口");
+            Controls.Add("treeView", "代码工具箱");
+            Controls.Add("watchView", "监视窗口");
+            controls.SelectionChanged += Controls_SelectionChanged;
+            controls.ItemsSource = Controls;
+        }
+        /// <summary>
+        /// 选项改变
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Controls_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (controls.SelectedItem == null)
+                return;
+            string key = ((KeyValuePair<string, string>)(controls.SelectedItem)).Key;
+            scriptContent.ShowPanel(key);
         }
 
         #region 属性
@@ -72,6 +91,10 @@ namespace TScriptTestApp
         /// 脚本配置
         /// </summary>
         private ScriptConfig ScriptConfig = new ScriptConfig();
+        /// <summary>
+        /// 控件集合
+        /// </summary>
+        private Dictionary<string, string> Controls = new Dictionary<string, string>();
         #endregion
         #region 访问器
         /// <summary>
@@ -164,6 +187,15 @@ namespace TScriptTestApp
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             scriptContent.RunActiveScript();
+        }
+        /// <summary>
+        /// 终止运行
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Stop_Click(object sender, RoutedEventArgs e)
+        {
+            scriptContent.StopActiveScript();
         }
         /// <summary>
         /// 设置服务URL
@@ -261,5 +293,7 @@ namespace TScriptTestApp
             }
         }
         #endregion
+
+        
     }
 }

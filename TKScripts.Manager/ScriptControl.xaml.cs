@@ -71,6 +71,10 @@ namespace TKScripts.Manager
         #endregion
         #region 属性
         /// <summary>
+        /// 控件key
+        /// </summary>
+        public string ControlKey { get; internal set; }
+        /// <summary>
         /// 项双击事件
         /// </summary>
         public event ItemEvent ItemMouseDoubleClickEvent = null;

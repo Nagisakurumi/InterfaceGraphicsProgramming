@@ -33,6 +33,10 @@ namespace TkScripts.Script
         /// </summary>
         private bool isDebugMode = false;
         /// <summary>
+        /// 是否终止运行
+        /// </summary>
+        private bool isStop = false;
+        /// <summary>
         /// 脚本运行线程
         /// </summary>
         private Task<bool> scriptRunThread = null;
@@ -116,6 +120,10 @@ namespace TkScripts.Script
         /// <param name="box"></param>
         protected void Dofunction(ItemBox box, WriteStreamCallBack wrs, IScriptLayout ml)
         {
+            if(isStop)
+            {
+                throw new Exception("主动停止了脚本!");
+            }
             //ml.SetFunctionBoxRun(Colors.Red, box);
             ScriptInput si = new ScriptInput();
             foreach (var item in box.InputDatas)
@@ -307,13 +315,14 @@ namespace TkScripts.Script
 
                 try
                 {
+                    isStop = false;
                     //初始化flag
                     isDebugMode = false;
                     Init(ml);
                     wrs?.Invoke("赋值属性完成,开始执行脚本");
                     foreach (var currentbox in ml.Itemboxs)
                     {
-                        RunningFunction(currentbox, wrs, ml);
+                        //RunningFunction(currentbox, wrs, ml);
                         //ml.SetFunctionBoxRun(Colors.Red, currentbox);
                         if (currentbox.BoxType == ItemBoxEnum.FUNCTION)
                         {
@@ -361,6 +370,8 @@ namespace TkScripts.Script
                 }
             }
         }
+
+        
         /// <summary>
         /// 脚本检测是否断点
         /// </summary>
@@ -412,6 +423,13 @@ namespace TkScripts.Script
         {
             string json = ScriptClient.PostStringAsync(itemBox.ScriptUrl, (JObject)JsonConvert.DeserializeObject(JsonConvert.SerializeObject(scriptInput)));
             return JsonConvert.DeserializeObject<ScriptOutput>(json);
+        }
+        /// <summary>
+        /// 终止脚本的运行
+        /// </summary>
+        public override void StopScript()
+        {
+            this.isStop = true;
         }
     }
 }

@@ -71,7 +71,10 @@ namespace TKScripts.Manager.ScriptManage
         /// 代码块工具箱
         /// </summary>
         public DataTreeView TreeView { get; set; } = null;
-
+        /// <summary>
+        /// 控件列表
+        /// </summary>
+        public Dictionary<string, Control> Controls { get; } = new Dictionary<string, Control>();
         /// <summary>
         /// 脚本列表
         /// </summary>
@@ -99,6 +102,21 @@ namespace TKScripts.Manager.ScriptManage
             InitializeComponent();
             this.Loaded += ScriptIntegrationForOne_Loaded;
             TreeView = FunctionDataList.FunctionView;
+
+            PropertyItControl.ControlKey = "property";
+            FunctionParaItemList.ControlKey = "paraItem";
+            ScriptControl.ControlKey = "script";
+            LogBox.ControlKey = "logBox";
+            TreeView.ControlKey = "treeView";
+            ScriptDebugWindow.ControlKey = "watchView";
+
+            Controls.Add("property", PropertyItControl);
+            Controls.Add("paraItem", FunctionParaItemList);
+            Controls.Add("script", ScriptControl);
+            Controls.Add("logBox", LogBox);
+            Controls.Add("treeView", TreeView);
+            Controls.Add("watchView", ScriptDebugWindow);
+
             mainContent.AddUserControl("property", PropertyItControl, Layout.LeftUp, "全局变量");
             mainContent.AddUserControl("paraItem", FunctionParaItemList, Layout.LeftDown, "函数的参数列表");
             mainContent.AddUserControl("script", ScriptControl, Layout.Right, "脚本列表");
@@ -251,12 +269,31 @@ namespace TKScripts.Manager.ScriptManage
             AllFunctionData.Add(IScriptLayout.AddSystemBox());
         }
         /// <summary>
+        /// 显示key的控件
+        /// </summary>
+        /// <param name="key"></param>
+        public void ShowPanel(string key)
+        {
+            if(Controls.Keys.Contains(key))
+            {
+                mainContent.ShowPane(key);
+            }
+        }
+        /// <summary>
         /// 运行当前激活的脚本
         /// </summary>
         public void RunActiveScript()
         {
             IScriptLayout script = (mainContent.GetActiveDocument() as StackingMainLayout).ScriptLayout;
             script.RunCompile();
+        }
+        /// <summary>
+        /// 停止运行当前激活的脚本
+        /// </summary>
+        public void StopActiveScript()
+        {
+            IScriptLayout script = (mainContent.GetActiveDocument() as StackingMainLayout).ScriptLayout;
+            script.StopRun();
         }
         /// <summary>
         /// 获取当前激活中的脚本

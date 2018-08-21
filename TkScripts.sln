@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TKScriptsServer", "TKScript
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerTestApp", "ServerTestApp\ServerTestApp.csproj", "{4FEE7537-B7C6-4CAE-A41C-158393FB6D50}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManager", "TaskManager\TaskManager.csproj", "{A503E839-AF07-43AC-9607-E2802A0AA024}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,14 @@ Global
 		{4FEE7537-B7C6-4CAE-A41C-158393FB6D50}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4FEE7537-B7C6-4CAE-A41C-158393FB6D50}.Release|x64.ActiveCfg = Release|Any CPU
 		{4FEE7537-B7C6-4CAE-A41C-158393FB6D50}.Release|x64.Build.0 = Release|Any CPU
+		{A503E839-AF07-43AC-9607-E2802A0AA024}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A503E839-AF07-43AC-9607-E2802A0AA024}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A503E839-AF07-43AC-9607-E2802A0AA024}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A503E839-AF07-43AC-9607-E2802A0AA024}.Debug|x64.Build.0 = Debug|Any CPU
+		{A503E839-AF07-43AC-9607-E2802A0AA024}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A503E839-AF07-43AC-9607-E2802A0AA024}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A503E839-AF07-43AC-9607-E2802A0AA024}.Release|x64.ActiveCfg = Release|Any CPU
+		{A503E839-AF07-43AC-9607-E2802A0AA024}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

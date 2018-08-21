@@ -47,6 +47,10 @@ namespace TkScripts.ScriptLayout
         #endregion
         #region 属性读取器
         /// <summary>
+        /// 控件key
+        /// </summary>
+        public string ControlKey { get; set; }
+        /// <summary>
         /// 树状数据
         /// </summary>
         public ObservableCollection<TreeData> MyData

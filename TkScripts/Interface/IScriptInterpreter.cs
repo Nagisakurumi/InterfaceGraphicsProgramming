@@ -44,6 +44,10 @@ namespace TkScripts.Interface
         /// <param name="wrs"></param>
         public abstract Task<bool> RunScript(IScriptLayout ml);
         /// <summary>
+        /// 终止脚本的运行
+        /// </summary>
+        public abstract void StopScript();
+        /// <summary>
         /// 脚本运行断点回调函数
         /// </summary>
         /// <param name="item"></param>

@@ -339,7 +339,7 @@ namespace TkScripts.Interface
         /// </summary>
         public virtual void StopRun()
         {
-
+            IScriptInterpreter.StopScript();
         }
         /// <summary>
         /// 在加载后调整itemboxs的关系

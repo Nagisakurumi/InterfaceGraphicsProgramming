@@ -25,7 +25,7 @@
 
 
                 <avalon:LayoutPanel  Orientation="Vertical">
-                    <avalon:LayoutDocumentPaneGroup Orientation="Horizontal">
+                    <avalon:LayoutDocumentPaneGroup Orientation="Horizontal" x:Name="MainParent">
                         <avalon:LayoutDocumentPane   x:Name="MainDocument">
                             <!--<avalon:LayoutDocument Title="content"></avalon:LayoutDocument>-->
                         </avalon:LayoutDocumentPane>
@@ -45,7 +45,7 @@
             </avalon:LayoutPanel>
 
             <avalon:LayoutRoot.LeftSide>
-                <avalon:LayoutAnchorSide>
+                <avalon:LayoutAnchorSide x:Name="LeftSideParent">
                     <avalon:LayoutAnchorGroup x:Name="LeftSideGroup">
 
                     </avalon:LayoutAnchorGroup>
@@ -53,7 +53,7 @@
             </avalon:LayoutRoot.LeftSide>
 
             <avalon:LayoutRoot.RightSide>
-                <avalon:LayoutAnchorSide>
+                <avalon:LayoutAnchorSide x:Name="RightSideParent">
                     <avalon:LayoutAnchorGroup x:Name="RightSideGroup">
 
                     </avalon:LayoutAnchorGroup>
@@ -61,7 +61,7 @@
             </avalon:LayoutRoot.RightSide>
 
             <avalon:LayoutRoot.TopSide>
-                <avalon:LayoutAnchorSide>
+                <avalon:LayoutAnchorSide x:Name="TopSideParent">
                     <avalon:LayoutAnchorGroup x:Name="TopSideGroup">
 
                     </avalon:LayoutAnchorGroup>
@@ -69,7 +69,7 @@
             </avalon:LayoutRoot.TopSide>
 
             <avalon:LayoutRoot.BottomSide>
-                <avalon:LayoutAnchorSide>
+                <avalon:LayoutAnchorSide x:Name="ButtomSideParent">
                     <avalon:LayoutAnchorGroup x:Name="ButtomSideGroup">
 
                     </avalon:LayoutAnchorGroup>

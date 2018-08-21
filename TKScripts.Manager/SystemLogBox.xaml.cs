@@ -24,7 +24,10 @@ namespace TKScripts.Manager
         {
             InitializeComponent();
         }
-
+        /// <summary>
+        /// 控件key
+        /// </summary>
+        public string ControlKey { get; internal set; }
         /// <summary>
         /// 写入日志
         /// </summary>
