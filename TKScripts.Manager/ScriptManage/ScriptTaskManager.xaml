@@ -5,8 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TKScripts.Manager.ScriptManage"
              xmlns:manager="clr-namespace:TKScripts.Manager"
+             xmlns:plugins="clr-namespace:TKScripts.Manager.ScriptManage.ManagerPlugin"
              mc:Ignorable="d" 
              d:DesignHeight="300" Width="520">
+    <UserControl.Resources>
+        <local:TitleConverter x:Key="title"></local:TitleConverter>
+    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"></ColumnDefinition>
@@ -21,6 +25,7 @@
             <Button Content="加载脚本" Margin="5" Click="Load_Script"></Button>
             <Button Content="保存任务" Margin="5" Click="Save_Task"></Button>
             <Button Content="运行任务" Margin="5" Click="Run_Task"></Button>
+            <Button Content="终止执行任务" Margin="5" Click="Stop_Task"></Button>
             <Button Content="运行所有任务" Margin="5" Click="Run_AllTask"></Button>
         </StackPanel>
         <Grid Grid.Column="0" Grid.Row="1">
@@ -60,12 +65,13 @@
                     <Button Content="创建任务" Click="Create_Task" ></Button>
                     <Button Content="删除选中任务" Click="Remove_Task" Grid.Column="1"></Button>
                 </Grid>
-                <ListBox  Name="tasks" Grid.Row="2" SelectionChanged="tasks_SelectionChanged">
+                <ListBox  Name="tasks" Grid.Row="2" SelectionChanged="tasks_SelectionChanged"
+                          MouseDoubleClick="TaskItem_Double">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Border>
-                                <TextBlock Text="{Binding Name}" VerticalAlignment="Center"
-                                           HorizontalAlignment="Center"></TextBlock>
+                                <plugins:TaskItemControl VerticalAlignment="Center" 
+                                                  HorizontalAlignment="Center" ></plugins:TaskItemControl>
                             </Border>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
@@ -80,19 +86,32 @@
                     <RowDefinition Height="2"></RowDefinition>
                     <RowDefinition Height="131"/>
                 </Grid.RowDefinitions>
-                <ListBox Grid.Row="0" AllowDrop="True" Name="taskItem">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <Image Source="/TKScripts.Manager;component/ICON/function.png" Stretch="Fill" Width="18" Height="18"
-                               VerticalAlignment="Center" HorizontalAlignment="Center"></Image>
-                                <TextBlock Text="{Binding Path=ScriptName,Mode=TwoWay}" VerticalAlignment="Stretch" 
-                                  Name="scriptName" 
-                                   Grid.Column="1" Margin="10, 0, 0, 0"></TextBlock>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
+                <DockPanel Grid.Row="0">
+                    <Border DockPanel.Dock="Top" BorderBrush="#FF126464" BorderThickness="2" Background="Gray">
+                        <TextBlock  Foreground="White" Name="taskTitle" HorizontalAlignment="Center" VerticalAlignment="Center"
+                               Text="{Binding ElementName=tasks,Path=SelectedItem,Converter={StaticResource title}}"></TextBlock>
+                    </Border>
+                    <ListBox AllowDrop="True" Name="taskItem">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="8*"></ColumnDefinition>
+                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Orientation="Horizontal" Grid.Column="0">
+                                        <Image Source="/TKScripts.Manager;component/ICON/function.png" Stretch="Fill" Width="18" Height="18"
+                                           VerticalAlignment="Center" HorizontalAlignment="Center"></Image>
+                                            <TextBlock Text="{Binding Path=ScriptName,Mode=TwoWay}" VerticalAlignment="Stretch" 
+                                              Name="scriptName" 
+                                               Margin="10, 0, 0, 0"></TextBlock>    
+                                    </StackPanel>
+                                    <TextBlock Grid.Column="1" Text="{Binding Path=Status}"></TextBlock>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </DockPanel>
                 <GridSplitter Grid.Row="1"></GridSplitter>
                 <manager:SystemLogBox Grid.Row="2" x:Name="logBox">
                     

@@ -47,14 +47,13 @@ namespace TScriptTestApp
         /// <param name="e"></param>
         private void ScriptWrite_Loaded(object sender, RoutedEventArgs e)
         {
-            Controls.Add("property", "属性窗口");
-            Controls.Add("paraItem", "参数窗口");
-            Controls.Add("script", "脚本窗口");
-            Controls.Add("logBox", "日志窗口");
-            Controls.Add("treeView", "代码工具箱");
-            Controls.Add("watchView", "监视窗口");
+            scriptContent.LoadPlugins();
             controls.SelectionChanged += Controls_SelectionChanged;
             controls.ItemsSource = Controls;
+
+            scriptContent.SetControlFloat("treeView", new Rect(100, 200, 200, 600));
+            this.WindowState = WindowState.Maximized;
+            
         }
         /// <summary>
         /// 选项改变
@@ -65,7 +64,7 @@ namespace TScriptTestApp
         {
             if (controls.SelectedItem == null)
                 return;
-            string key = ((KeyValuePair<string, string>)(controls.SelectedItem)).Key;
+            string key = controls.SelectedItem.ToString();
             scriptContent.ShowPanel(key);
         }
 
@@ -94,7 +93,7 @@ namespace TScriptTestApp
         /// <summary>
         /// 控件集合
         /// </summary>
-        private Dictionary<string, string> Controls = new Dictionary<string, string>();
+        private ObservableCollection<string> Controls => scriptContent.Controls;
         #endregion
         #region 访问器
         /// <summary>
@@ -285,6 +284,7 @@ namespace TScriptTestApp
                 treeDatas.Add(treeData);
                 scriptContent.RestFunctionData();
                 scriptContent.SetFunctionData(treeDatas);
+                MessageBox.Show("请求成功, 更新测试块列表成功!");
             }
             catch (Exception ex)
             {

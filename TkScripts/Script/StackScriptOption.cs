@@ -124,7 +124,7 @@ namespace TkScripts.Script
             {
                 throw new Exception("主动停止了脚本!");
             }
-            //ml.SetFunctionBoxRun(Colors.Red, box);
+            ml.SetFunctionBoxRun(box);
             ScriptInput si = new ScriptInput();
             foreach (var item in box.InputDatas)
             {
@@ -159,7 +159,7 @@ namespace TkScripts.Script
             }
             si.Dispose();
             si = null;
-            //ml.SetFunctionBoxStop(Colors.White, box);
+            ml.SetFunctionBoxStop(box);
         }
         /// <summary>
         /// 执行if框
@@ -284,7 +284,7 @@ namespace TkScripts.Script
         {
             foreach (var currentbox in (box as ItemBox).Children)
             {
-                //ml.SetFunctionBoxRun(Colors.Red, currentbox);
+                ml.SetFunctionBoxRun(currentbox);
                 if (currentbox.BoxType == ItemBoxEnum.FUNCTION)
                 {
                     Dofunction(currentbox, wrs, ml);
@@ -297,7 +297,7 @@ namespace TkScripts.Script
                 {
                     DoWhileFunction(currentbox, wrs, ml);
                 }
-                //ml.SetFunctionBoxStop(Colors.White, currentbox);
+                ml.SetFunctionBoxStop(currentbox);
             }
         }
         /// <summary>
@@ -310,6 +310,7 @@ namespace TkScripts.Script
 
             scriptRunThread = new Task<bool>((obj) =>
             {
+                IsRunning = true;
                 IScriptLayout ml = obj as IScriptLayout;
                 WriteStreamCallBack wrs = ml.ComipleMessageCall;
 
@@ -350,6 +351,7 @@ namespace TkScripts.Script
                 {
                     manager.Clear();
                     wrs?.Invoke("程序运行结束");
+                    IsRunning = false;
                 }
             }, m);
             scriptRunThread.Start();
@@ -421,8 +423,15 @@ namespace TkScripts.Script
 
         private ScriptOutput RunScript(IItemBox itemBox, ScriptInput scriptInput)
         {
+            ScriptRequest?.Invoke(scriptInput, itemBox.Name);
             string json = ScriptClient.PostStringAsync(itemBox.ScriptUrl, (JObject)JsonConvert.DeserializeObject(JsonConvert.SerializeObject(scriptInput)));
-            return JsonConvert.DeserializeObject<ScriptOutput>(json);
+            ScriptOutput scriptOutput = JsonConvert.DeserializeObject<ScriptOutput>(json); ;
+            ScriptReponse?.Invoke(scriptOutput, itemBox.Name);
+            if (scriptOutput.IsExecption)
+            {
+                throw new Exception("服务器给出停止信号!");
+            }
+            return scriptOutput;
         }
         /// <summary>
         /// 终止脚本的运行

@@ -49,8 +49,27 @@ namespace TkScripts.ScriptLayout.StackingLayout
             XTreeView.Drop += XTreeView_Drop;
             XTreeView.MouseMove += XTreeView_MouseMove;
             XTreeView.DragOver += XTreeView_DragOver;
-            
+            //XTreeView.MouseDown += XTreeView_MouseDown;
         }
+        /// <summary>
+        /// 内容被选中
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void FunctionRow_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            this.IItemBoxSelected?.Invoke(this.ScriptLayout, XTreeView.SelectedItem as IItemBox);
+        }
+        /// <summary>
+        /// 鼠标点击事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void XTreeView_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            this.IItemBoxSelected?.Invoke(this.ScriptLayout, XTreeView.SelectedItem as IItemBox);
+        }
+
         /// <summary>
         /// 拖入
         /// </summary>
@@ -502,8 +521,7 @@ namespace TkScripts.ScriptLayout.StackingLayout
         public virtual void SetFunctionBoxRun(Color color, IItemBox ibox)
         {
             this.Dispatcher.Invoke(new Action<Color, IItemBox>((c, ib) => {
-                //ib.BoxBrush = null;
-                //ib.BoxBrush = new SolidColorBrush(c);
+                ib.IsRunning = true;
             }), color, ibox);
         }
         /// <summary>
@@ -513,8 +531,7 @@ namespace TkScripts.ScriptLayout.StackingLayout
         public virtual void SetFunctionBoxStop(Color color, IItemBox ibox)
         {
             this.Dispatcher.Invoke(new Action<Color, IItemBox>((c, ib) => {
-                //ib.BoxBrush = null;
-                //ib.BoxBrush = new SolidColorBrush(c);
+                ib.IsRunning = false;
             }), color, ibox);
         }
         /// <summary>
@@ -545,6 +562,7 @@ namespace TkScripts.ScriptLayout.StackingLayout
         {
 
         }
+
         #endregion
         #region static
         /// <summary>
@@ -557,5 +575,7 @@ namespace TkScripts.ScriptLayout.StackingLayout
             return new StackingMainLayout() { ScriptLayout = scriptLayout, DataContext = scriptLayout };
         }
         #endregion
+
+        
     }
 }

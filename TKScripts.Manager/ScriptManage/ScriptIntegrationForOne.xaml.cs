@@ -23,6 +23,7 @@ using TkScripts;
 using TkScripts.Script;
 using TKScriptsServer.Agreement;
 using System.ComponentModel;
+using PluginInterface;
 
 namespace TKScripts.Manager.ScriptManage
 {
@@ -72,9 +73,13 @@ namespace TKScripts.Manager.ScriptManage
         /// </summary>
         public DataTreeView TreeView { get; set; } = null;
         /// <summary>
+        /// /插件管理
+        /// </summary>
+        public Plugins.PluginManager PluginManager { get; private set; } = null;
+        /// <summary>
         /// 控件列表
         /// </summary>
-        public Dictionary<string, Control> Controls { get; } = new Dictionary<string, Control>();
+        public ObservableCollection<string> Controls { get; } = new ObservableCollection<string>();
         /// <summary>
         /// 脚本列表
         /// </summary>
@@ -103,26 +108,28 @@ namespace TKScripts.Manager.ScriptManage
             this.Loaded += ScriptIntegrationForOne_Loaded;
             TreeView = FunctionDataList.FunctionView;
 
-            PropertyItControl.ControlKey = "property";
-            FunctionParaItemList.ControlKey = "paraItem";
-            ScriptControl.ControlKey = "script";
-            LogBox.ControlKey = "logBox";
-            TreeView.ControlKey = "treeView";
-            ScriptDebugWindow.ControlKey = "watchView";
+            PropertyItControl.ControlKey = "全局变量";
+            FunctionParaItemList.ControlKey = "函数的参数列表";
+            ScriptControl.ControlKey = "脚本列表";
+            LogBox.ControlKey = "输出";
+            TreeView.ControlKey = "代码工具箱";
+            ScriptDebugWindow.ControlKey = "监视窗口";
 
-            Controls.Add("property", PropertyItControl);
-            Controls.Add("paraItem", FunctionParaItemList);
-            Controls.Add("script", ScriptControl);
-            Controls.Add("logBox", LogBox);
-            Controls.Add("treeView", TreeView);
-            Controls.Add("watchView", ScriptDebugWindow);
+            Controls.Add("全局变量");
+            Controls.Add("函数的参数列表");
+            Controls.Add("脚本列表");
+            Controls.Add("输出");
+            Controls.Add("代码工具箱");
+            Controls.Add("监视窗口");
 
-            mainContent.AddUserControl("property", PropertyItControl, Layout.LeftUp, "全局变量");
-            mainContent.AddUserControl("paraItem", FunctionParaItemList, Layout.LeftDown, "函数的参数列表");
-            mainContent.AddUserControl("script", ScriptControl, Layout.Right, "脚本列表");
-            mainContent.AddUserControl("logBox", LogBox, Layout.Buttom, "输出");
-            mainContent.AddUserControl("treeView", TreeView, Layout.LeftSide, "代码工具箱");
-            mainContent.AddUserControl("watchView", ScriptDebugWindow, Layout.Right, "监视窗口");
+            mainContent.AddUserControl("全局变量", PropertyItControl, Layout.LeftUp, "全局变量");
+            mainContent.AddUserControl("函数的参数列表", FunctionParaItemList, Layout.LeftDown, "函数的参数列表");
+            mainContent.AddUserControl("脚本列表", ScriptControl, Layout.Right, "脚本列表");
+            mainContent.AddUserControl("代码工具箱", TreeView, Layout.Buttom, "代码工具箱");
+            mainContent.AddUserControl("输出", LogBox, Layout.Buttom, "输出");
+            mainContent.AddUserControl("监视窗口", ScriptDebugWindow, Layout.Right, "监视窗口");
+
+
             AllFunctionData.Add(IScriptLayout.AddSystemBox());
             TreeView.MyData = AllFunctionData;
             TreeView.CreateCallback += TreeView_CreateCallback;
@@ -134,6 +141,8 @@ namespace TKScripts.Manager.ScriptManage
             ScriptControl.ItemScriptNameChanged += ScriptControl_ItemScriptNameChanged;
             //ScriptControl.AddScript(new StackingMainLayout() { ScriptName = "测试脚本" });
 
+
+            
         }
         #region 事件
         /// <summary>
@@ -165,7 +174,7 @@ namespace TKScripts.Manager.ScriptManage
         /// <param name="e"></param>
         private void ScriptIntegrationForOne_Loaded(object sender, RoutedEventArgs e)
         {
-           
+            
         }
         /// <summary>
         /// 脚本删除事件
@@ -178,7 +187,13 @@ namespace TKScripts.Manager.ScriptManage
             script.ScriptLayout.ComipleMessageCall -= LogBox.WritLog;
             mainContent.DelUserExtendByKey(script.Id);
             script.ScriptLayout.ScriptBreakPoint -= ScriptBreakPoint;
+
+            script.ScriptLayout.IScriptInterpreter.ScriptRequest -= ScriptRequest;
+            script.ScriptLayout.IScriptInterpreter.ScriptReponse -= ScriptReponse;
         }
+
+        
+
         /// <summary>
         /// 脚本添加事件
         /// </summary>
@@ -195,7 +210,11 @@ namespace TKScripts.Manager.ScriptManage
                 script.ScriptLayout.ComipleMessageCall = LogBox.WritLog;
             }
             script.ScriptLayout.ScriptBreakPoint += ScriptBreakPoint;
+            script.ScriptLayout.IScriptInterpreter.ScriptRequest += ScriptRequest;
+            script.ScriptLayout.IScriptInterpreter.ScriptReponse += ScriptReponse;
+
         }
+
         /// <summary>
         /// 脚本断点回调函数
         /// </summary>
@@ -219,6 +238,32 @@ namespace TKScripts.Manager.ScriptManage
                 script.DataTree_CreateCallback(data);
             }
         }
+
+        /// <summary>
+        /// 脚本请求回调
+        /// </summary>
+        /// <param name="arg1"></param>
+        /// <param name="arg2"></param>
+        private void ScriptRequest(ScriptInput arg1, string arg2)
+        {
+            if (PluginManager == null) return;
+            foreach (var item in PluginManager.PluginItems)
+            {
+                item.ScriptPlugin.SendToRequestFunction(arg1, arg2);
+            }
+        }
+        /// <summary>
+        /// 脚本返回回调
+        /// </summary>
+        /// <param name="obj"></param>
+        private void ScriptReponse(ScriptOutput obj, string name)
+        {
+            if (PluginManager == null) return;
+            foreach (var item in PluginManager.PluginItems)
+            {
+                item.ScriptPlugin.ReciveResponseFunction(obj, name);
+            }
+        }
         /// <summary>
         /// 脚本双击事件
         /// </summary>
@@ -240,6 +285,7 @@ namespace TKScripts.Manager.ScriptManage
         /// <summary>
         /// 代码块被选中
         /// </summary>
+        /// <param name="scriptLayout"></param>
         /// <param name="itembox"></param>
         public void IItemBoxSelected(IScriptLayout scriptLayout, IItemBox itembox)
         {
@@ -274,7 +320,7 @@ namespace TKScripts.Manager.ScriptManage
         /// <param name="key"></param>
         public void ShowPanel(string key)
         {
-            if(Controls.Keys.Contains(key))
+            if(Controls.Contains(key))
             {
                 mainContent.ShowPane(key);
             }
@@ -294,6 +340,15 @@ namespace TKScripts.Manager.ScriptManage
         {
             IScriptLayout script = (mainContent.GetActiveDocument() as StackingMainLayout).ScriptLayout;
             script.StopRun();
+        }
+        /// <summary>
+        /// 设置控件浮动
+        /// </summary>
+        /// <param name="keyname"></param>
+        /// <param name="rect"></param>
+        public void SetControlFloat(string keyname, Rect rect)
+        {
+            mainContent.SetControlFloat(keyname, rect);
         }
         /// <summary>
         /// 获取当前激活中的脚本
@@ -317,9 +372,65 @@ namespace TKScripts.Manager.ScriptManage
             //    ScriptControl.AddScript(item);
             //}
         }
+        /// <summary>
+        /// 加载插件
+        /// </summary>
+        public void LoadPlugins()
+        {
+            if(PluginManager == null)
+            {
+                PluginManager = new Plugins.PluginManager();
+            }
+            PluginManager.LoadPathDirectory = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Plugins");
+            PluginManager.PluginNameEx = "Script_Plugin";
+            PluginManager.PluginMainInputClassName = "MainClass";
+            PluginManager.LoadPlugins();
+
+            foreach (var item in PluginManager.PluginItems)
+            {
+                if (Controls.Contains(item.ScriptPlugin.Name) == true)
+                {
+                    MessageBox.Show("插件 : " + item.ScriptPlugin.Name + ", 已经存在!加载失败!");
+                    continue;
+                }
+                item.ScriptPlugin.Start();
+                Controls.Add(item.ScriptPlugin.Name);
+                if (item.ScriptPlugin.PluginType == PluginInterface.PluginType.WPF)
+                {
+                    mainContent.AddUserControl(item.ScriptPlugin.Name, item.ScriptPlugin.GetPluginInterface() as FrameworkElement
+                        , ChangeLayout(item.ScriptPlugin.LayoutType), item.ScriptPlugin.Name);
+                }
+                else
+                {
+                    mainContent.AddUserControl(item.ScriptPlugin.Name, item.ScriptPlugin.GetPluginInterface() as System.Windows.Forms.Control
+                       , ChangeLayout(item.ScriptPlugin.LayoutType), item.ScriptPlugin.Name);
+                }
+            }
+        }
+        /// <summary>
+        /// 转换布局
+        /// </summary>
+        /// <param name="layoutType"></param>
+        /// <returns></returns>
+        public Layout ChangeLayout(LayoutType layoutType)
+        {
+            switch (layoutType)
+            {
+                case LayoutType.Left:
+                    return Layout.LeftUp;
+                case LayoutType.Right:
+                    return Layout.Right;
+                case LayoutType.Top:
+                    return Layout.TopSide;
+                case LayoutType.Bottom:
+                    return Layout.Buttom;
+                default:
+                    return Layout.Buttom;
+            }
+        }
         #endregion
 
-        
+
     }
 
     internal class ItemboxParamterCom : INotifyPropertyChanged

@@ -35,6 +35,10 @@ namespace TkScripts.Interface
         /// </summary>
         bool IsHasBreakPoint { get; set; }
         /// <summary>
+        /// 是否在运行状态
+        /// </summary>
+        bool IsRunning { get; set; }
+        /// <summary>
         /// 添加输入值
         /// </summary>
         /// <param name="pitem"></param>
@@ -449,6 +453,7 @@ namespace TkScripts.Interface
         private string name = "";
         private string tipText = "";
         private string parentNodeId = "";
+        private bool isrunning = false;
         private ItemBoxEnum boxType = ItemBoxEnum.FUNCTION;
         private ObservableCollection<ParatItem> inputDatas = new ObservableCollection<ParatItem>();
         private ObservableCollection<ParatItem> outputDatas = new ObservableCollection<ParatItem>();
@@ -536,7 +541,9 @@ namespace TkScripts.Interface
                 Changed("Name");
             }
         }
-
+        /// <summary>
+        /// 类型
+        /// </summary>
         public ItemBoxEnum BoxType
         {
             get
@@ -696,6 +703,21 @@ namespace TkScripts.Interface
             set
             {
                 this.parentNodeId = value;
+            }
+        }
+        /// <summary>
+        /// 是否在运行改函数块
+        /// </summary>
+        public bool IsRunning
+        {
+            get
+            {
+                return isrunning;
+            }
+            set
+            {
+                isrunning = value;
+                Changed("IsRunning");
             }
         }
         #endregion

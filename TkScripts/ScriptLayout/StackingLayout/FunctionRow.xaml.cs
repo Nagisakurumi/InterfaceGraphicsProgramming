@@ -196,4 +196,33 @@ namespace TkScripts.ScriptLayout.StackingLayout
             }
         }
     }
+    /// <summary>
+    /// 是否在运行绑定转换
+    /// </summary>
+    public class VisiableIsRunning : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            try
+            {
+                if ((bool)value)
+                {
+                    return new SolidColorBrush(Color.FromArgb(0xff, 0xff, 0x00, 0x00));
+                }
+                else
+                {
+                    return new SolidColorBrush(Color.FromArgb(0xff, 0xee, 0xe0, 0x54));
+                }
+            }
+            catch (Exception)
+            {
+                return new SolidColorBrush(Color.FromArgb(0xff, 0xee, 0xe0, 0x54));
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

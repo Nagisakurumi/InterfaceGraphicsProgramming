@@ -79,6 +79,7 @@
     <Compile Include="MainManagerControl.xaml.cs">
       <DependentUpon>MainManagerControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Plugins\PluginManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -105,6 +106,9 @@
       <DependentUpon>ScriptItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="ScriptManage\ManagerPlugin\TaskItem.cs" />
+    <Compile Include="ScriptManage\ManagerPlugin\TaskItem.xaml.cs">
+      <DependentUpon>TaskItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ScriptManage\ScriptConfig.cs" />
     <Compile Include="ScriptManage\ScriptIntegrationForOne.xaml.cs">
       <DependentUpon>ScriptIntegrationForOne.xaml</DependentUpon>
@@ -151,6 +155,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ScriptManage\ManagerPlugin\TaskItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ScriptManage\ScriptIntegrationForOne.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -165,6 +173,14 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\PluginInterface\PluginInterface.csproj">
+      <Project>{fb58fb83-64eb-4c29-820a-5f2bdbe79536}</Project>
+      <Name>PluginInterface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PluginsLoadLib\PluginsLoadLib.csproj">
+      <Project>{e57b1381-415d-4506-a8e6-796cf73faf89}</Project>
+      <Name>PluginsLoadLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TKScriptsServer\TKScriptsServer.csproj">
       <Project>{26a7106d-c1f4-405c-ba89-f81053d35ecf}</Project>
       <Name>TKScriptsServer</Name>

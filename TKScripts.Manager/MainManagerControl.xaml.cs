@@ -347,6 +347,23 @@ namespace TKScripts.Manager
             }
         }
         /// <summary>
+        /// 设置控件浮动
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="rect"></param>
+        public void SetControlFloat(string key, Rect rect)
+        {
+            if (userControlExtend.ContainsKey(key))
+            {
+                UserControlExtend userControl = userControlExtend[key];
+                userControl.Element.FloatingLeft = rect.X;
+                userControl.Element.FloatingTop = rect.Y;
+                userControl.Element.FloatingWidth = rect.Width;
+                userControl.Element.FloatingHeight = rect.Height;
+                userControl.Element.Float();
+            }
+        }
+        /// <summary>
         /// 设置主题
         /// </summary>
         /// <param name="theme"></param>

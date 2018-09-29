@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -40,6 +41,14 @@ namespace TKScripts.Manager.ScriptManage
         /// 运行任务
         /// </summary>
         private Task runTask = null;
+        /// <summary>
+        /// 正在运行的任务
+        /// </summary>
+        private TaskItem runTaskItem = null;
+        /// <summary>
+        /// 是否取消任务
+        /// </summary>
+        private bool isCancleTask = false;
         /// <summary>
         /// 脚本配置
         /// </summary>
@@ -94,7 +103,14 @@ namespace TKScripts.Manager.ScriptManage
         /// <param name="e"></param>
         private void Save_Task(object sender, RoutedEventArgs e)
         {
-            TaskItems.SaveObjectToFile(System.IO.Path.Combine(projectPath, "projectTask.task"));
+            if(TaskItems.SaveObjectToFile(System.IO.Path.Combine(projectPath, "projectTask.task")))
+            {
+                MessageBox.Show("成功保存任务到当前项目的，projectTask.task文件中!");
+            }
+            else
+            {
+                MessageBox.Show("保存任务失败!");
+            }
         }
         /// <summary>
         /// 加载脚本
@@ -178,9 +194,13 @@ namespace TKScripts.Manager.ScriptManage
             {
                 runTask = new Task((task) => 
                 {
+                    isCancleTask = false;
                     ScriptTask scriptTask = task as ScriptTask;
                     foreach (var item in scriptTask.TaskItems)
                     {
+                        if (isCancleTask)
+                            return;
+                        runTaskItem = item;
                         Task<bool> taskitem = item.ScriptLayout.RunCompile();
                         logBox.WritLog("脚本" + item.ScriptLayout.ScriptName + "运行结果 : " +
                             (taskitem.Result ? "成功" : "失败"));
@@ -205,11 +225,15 @@ namespace TKScripts.Manager.ScriptManage
             {
                 runTask = new Task(() =>
                 {
+                    isCancleTask = false;
                     foreach (var scriptTask in TaskItems)
                     {
                         logBox.WritLog("开始运行任务 ：" + scriptTask.Name);
                         foreach (var item in scriptTask.TaskItems)
                         {
+                            if (isCancleTask)
+                                return;
+                            runTaskItem = item;
                             Task<bool> taskitem = item.ScriptLayout.RunCompile();
                             logBox.WritLog("脚本" + item.ScriptLayout.ScriptName + "运行结果 : " +
                                 (taskitem.Result ? "成功" : "失败"));
@@ -264,6 +288,44 @@ namespace TKScripts.Manager.ScriptManage
         {
             if (tasks.SelectedItem == null) return;
             taskItem.ItemsSource = (tasks.SelectedItem as ScriptTask).TaskItems;
+            
+        }
+        /// <summary>
+        /// 终止任务执行
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Stop_Task(object sender, RoutedEventArgs e)
+        {
+            isCancleTask = true;
+            runTaskItem.ScriptLayout.StopRun();
+        }
+        /// <summary>
+        /// 任务双击改名
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TaskItem_Double(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+    }
+
+
+    public class TitleConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if(value == null)
+            {
+                return "暂未选择任务!";
+            }
+            return (value as ScriptTask).Name;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
         }
     }
 }

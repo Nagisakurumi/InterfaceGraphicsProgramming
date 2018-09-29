@@ -7,10 +7,12 @@
              xmlns:th="clr-namespace:TkScripts.ScriptLayout.StackingLayout"
              mc:Ignorable="d" x:Name="main" Background="#00000000"
              >
+    
     <interface:IFunctionBox.Resources>
         <th:VisiableAndIsHasStopPoint x:Key="haspointchange"></th:VisiableAndIsHasStopPoint>
+        <th:VisiableIsRunning x:Key="isrunning"></th:VisiableIsRunning>
     </interface:IFunctionBox.Resources>
-    <Border  CornerRadius="5" BorderThickness="2" BorderBrush="#FFEEE054"
+    <Border  CornerRadius="5" BorderThickness="2" BorderBrush="{Binding Path=IsRunning,Converter={StaticResource isrunning}}"
             >
         <Grid>
             <Grid.RowDefinitions>

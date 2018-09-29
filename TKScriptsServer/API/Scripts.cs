@@ -29,6 +29,14 @@ namespace TKScriptsServer.API
         /// </summary>
         public Dictionary<string, ScriptAPI> scriptAPIs { get; } = new Dictionary<string, ScriptAPI>();
         /// <summary>
+        /// 更新API请求
+        /// </summary>
+        public Action updateAPIsRequest = null;
+        /// <summary>
+        /// 发送消息到客户端信息回调
+        /// </summary>
+        public Action<ScriptOutput> sendMsgToClient = null;
+        /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="listenerPath">监听的url</param>
@@ -43,7 +51,7 @@ namespace TKScriptsServer.API
         /// </summary>
         /// <param name="arg1">请求流</param>
         /// <param name="response">回写流</param>
-        public void RequestCallBack(HttpListenerRequest request, HttpListenerResponse response)
+        protected void RequestCallBack(HttpListenerRequest request, HttpListenerResponse response)
         {
             RequestMsg requestMsg = null;
             try
@@ -51,6 +59,7 @@ namespace TKScriptsServer.API
                 requestMsg = ScriptServer.GetRequestMessage(request);
                 if (requestMsg.ApiName.Equals(GetAllAPIUrlAPIName))
                 {
+                    updateAPIsRequest?.Invoke();
                     writeResponse(getAllApi(), response, 200);
                 }
                 else if (scriptAPIs.ContainsKey(requestMsg.ApiName))
@@ -91,12 +100,16 @@ namespace TKScriptsServer.API
         /// <param name="scriptFunction">脚本函数</param>
         public bool AddScriptFunction(string url, ScriptFunction scriptFunction)
         {
-            if(scriptAPIs.ContainsKey(scriptServer.PrefixesPath + url) == false)
+            if(scriptAPIs.ContainsKey(url) == false)
             {
                 scriptAPIs.Add(url, new ScriptAPI(scriptServer.PrefixesPath + url, scriptFunction));
                 return true;
             }
-            return false;
+            else
+            {
+                scriptAPIs[url] = new ScriptAPI(scriptServer.PrefixesPath + url, scriptFunction);
+                return true;
+            }
         }
         /// <summary>
         /// 删除一个脚本函数
@@ -156,8 +169,9 @@ namespace TKScriptsServer.API
         /// <param name="obj"></param>
         /// <param name="response"></param>
         /// <param name="statuCode"></param>
-        private void writeResponse(object obj, HttpListenerResponse response, int statuCode)
+        private void writeResponse(ScriptOutput obj, HttpListenerResponse response, int statuCode)
         {
+            sendMsgToClient?.Invoke(obj);
             writeResponse(JsonConvert.SerializeObject(obj), response, statuCode);
         }
         /// <summary>

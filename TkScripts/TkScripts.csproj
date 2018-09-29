@@ -40,9 +40,9 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="LogLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="LogLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\我的类库\LogLib\bin\x64\Debug\LogLib.dll</HintPath>
+      <HintPath>..\TKScriptsServer\bin\Debug\LogLib.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\OPPO充电\bin\x64\Debug\Newtonsoft.Json.dll</HintPath>

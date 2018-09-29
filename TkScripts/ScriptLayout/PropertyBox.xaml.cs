@@ -29,11 +29,11 @@ namespace TkScripts.ScriptLayout
 
         private void TextBox_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
-            {
-                content.IsReadOnly = true;
-                valuecontent.IsReadOnly = true;
-            }
+            //if (e.Key == Key.Enter)
+            //{
+            //    content.IsReadOnly = true;
+            //    valuecontent.IsReadOnly = true;
+            //}
         }
 
 

@@ -50,6 +50,20 @@ namespace TKScripts.Manager.ScriptManage.ManagerPlugin
             }
         }
         /// <summary>
+        /// 脚本状态
+        /// </summary>
+        public string Status
+        {
+            get
+            {
+                if (ScriptLayout == null)
+                    return "脚本异常!";
+                else{
+                    return ScriptLayout.IScriptInterpreter.IsRunning ? "正在执行" : "没有运行";
+                }
+            }
+        }
+        /// <summary>
         /// 次数
         /// </summary>
         public int Times { get => times; set { times = value; Changed("Times"); } }
@@ -92,6 +106,7 @@ namespace TKScripts.Manager.ScriptManage.ManagerPlugin
                 Changed("Name");
             }
         }
+        
 
         /// <summary>
         /// 脚本任务列表

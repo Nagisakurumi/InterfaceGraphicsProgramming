@@ -207,6 +207,22 @@ namespace TkScripts.Interface
             }
             return null;
         }
+        /// <summary>
+        /// 设置代码块在运行
+        /// </summary>
+        /// <param name="itemBox"></param>
+        public void SetFunctionBoxRun(IItemBox itemBox)
+        {
+            itemBox.IsRunning = true;
+        }
+        /// <summary>
+        /// 设置代码块在停止
+        /// </summary>
+        /// <param name="itemBox"></param>
+        public void SetFunctionBoxStop(IItemBox itemBox)
+        {
+            itemBox.IsRunning = false;
+        }
 
         /// <summary>
         /// 运行和编译

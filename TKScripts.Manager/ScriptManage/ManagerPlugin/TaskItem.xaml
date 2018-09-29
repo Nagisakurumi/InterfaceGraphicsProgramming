@@ -1,0 +1,12 @@
+﻿<UserControl x:Class="TKScripts.Manager.ScriptManage.ManagerPlugin.TaskItemControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TKScripts.Manager.ScriptManage.ManagerPlugin"
+             mc:Ignorable="d" Name="main"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <TextBox Name="nameBox" Text="{Binding Name,Mode=TwoWay}" LostFocus="nameBox_LostFocus" Foreground="Black"
+             KeyDown="nameBox_KeyDown"
+             MouseDoubleClick="TextBox_MouseDoubleClick"></TextBox>
+</UserControl>

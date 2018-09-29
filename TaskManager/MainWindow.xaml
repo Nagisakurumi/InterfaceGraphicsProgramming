@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:TaskManager"
         xmlns:manager="clr-namespace:TKScripts.Manager.ScriptManage;assembly=TKScripts.Manager"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" Name="main">
+        Title="任务执行器" Height="450" Width="800" Name="main">
     <Grid>
         <manager:ScriptTaskManager Width="{Binding ElementName=main,Path=ActualWidth}"
                                    Height="{Binding ElementName=main,Path=ActualHeight}"></manager:ScriptTaskManager>

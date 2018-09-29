@@ -8,11 +8,11 @@
              >
     <StackPanel Grid.Row="0" VerticalAlignment="Center" Orientation="Horizontal" Margin="1">
         <TextBlock Text="名称:"  HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
-        <TextBox VerticalContentAlignment="Center" KeyDown="TextBox_KeyDown"  Name="content" Text="{Binding Path=Name,Mode=TwoWay}" IsReadOnly="True" Width="80" ></TextBox>
+        <TextBox VerticalContentAlignment="Center" KeyDown="TextBox_KeyDown"  Name="content" Text="{Binding Path=Name,Mode=TwoWay}" IsReadOnly="False" Width="80" ></TextBox>
         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="当前值:" ></TextBlock>
-        <TextBox VerticalContentAlignment="Center" KeyDown="TextBox_KeyDown"  Name="valuecontent" Width="80" HorizontalAlignment="Center" VerticalAlignment="Center" IsReadOnly="True" MaxWidth="100" Text="{Binding Path=Value,Mode=TwoWay}" ></TextBox>
-        <Border  BorderBrush="White" BorderThickness="1" Margin="2" Cursor="Hand" MouseDown="Border_MouseDown">
+        <TextBox VerticalContentAlignment="Center" KeyDown="TextBox_KeyDown"  Name="valuecontent" Width="80" HorizontalAlignment="Center" VerticalAlignment="Center" IsReadOnly="False" MaxWidth="100" Text="{Binding Path=Value,Mode=TwoWay}" ></TextBox>
+        <!--<Border  BorderBrush="White" BorderThickness="1" Margin="2" Cursor="Hand" MouseDown="Border_MouseDown">
             <TextBlock Text="修改信息" FontSize="10" VerticalAlignment="Center" ></TextBlock>
-        </Border>
+        </Border>-->
     </StackPanel>
 </UserControl>

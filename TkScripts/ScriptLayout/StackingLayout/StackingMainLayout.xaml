@@ -33,7 +33,7 @@
             </TreeView.ItemContainerStyle>
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate  ItemsSource="{Binding Children}">
-                    <local:FunctionRow HorizontalAlignment="Stretch" MinWidth="400"></local:FunctionRow>
+                    <local:FunctionRow HorizontalAlignment="Stretch" MinWidth="400" MouseDown="FunctionRow_MouseDown"></local:FunctionRow>
                     <!--<Border HorizontalAlignment="Stretch" BorderBrush="Black" BorderThickness="3" CornerRadius="5" Width="400">--><!--
                         <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5"
                                    Text="{Binding Path=Name}"></TextBlock>

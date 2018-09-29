@@ -19,9 +19,21 @@ namespace TkScripts.Interface
         /// </summary>
         public ScriptBreakPointCallBackHandle ScriptBreakPoint = null;
         /// <summary>
+        /// 脚本请求回调
+        /// </summary>
+        public Action<ScriptInput, string> ScriptRequest;
+        /// <summary>
+        /// 脚本返回回调
+        /// </summary>
+        public Action<ScriptOutput, string> ScriptReponse;
+        /// <summary>
         /// 对象管理
         /// </summary>
         protected ScriptObjectManager manager = new ScriptObjectManager();
+        /// <summary>
+        /// 是否处于运行状态
+        /// </summary>
+        public bool IsRunning { get; protected set; }
         /// <summary>
         /// 初始化解释器
         /// </summary>
