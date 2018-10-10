@@ -425,9 +425,10 @@ namespace TkScripts.Script
         {
             ScriptRequest?.Invoke(scriptInput, itemBox.Name);
             string json = ScriptClient.PostStringAsync(itemBox.ScriptUrl, (JObject)JsonConvert.DeserializeObject(JsonConvert.SerializeObject(scriptInput)));
-            ScriptOutput scriptOutput = JsonConvert.DeserializeObject<ScriptOutput>(json); ;
+            ScriptOutput scriptOutput = JsonConvert.DeserializeObject<ScriptOutput>(json);
+            
             ScriptReponse?.Invoke(scriptOutput, itemBox.Name);
-            if (scriptOutput.IsExecption)
+            if (scriptOutput != null && scriptOutput.IsExecption)
             {
                 throw new Exception("服务器给出停止信号!");
             }
