@@ -30,6 +30,7 @@ namespace TKScriptsServer.Client
             //clientHandler.CookieContainer = CookieContainer;
             httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Add("user-agent", UserAgent);
+            httpClient.Timeout = TimeSpan.FromHours(10);
             //httpClient.DefaultRequestHeaders.Add("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8");
             //httpClient.DefaultRequestHeaders.Add("Referer", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36");
             httpClient.DefaultRequestHeaders.Add("KeepAlive", "true");
@@ -76,6 +77,7 @@ namespace TKScriptsServer.Client
         {
             HttpContent hc = new StringContent(content.ToString(Formatting.None), Encoding.UTF8);
             hc.Headers.ContentType = MediaTypeHeaderValue.Parse("application/ x-www-form-urlencoded; charset=UTF-8");
+            
             var response = httpClient.PostAsync(url, hc);
             response.Wait();
             return await response;

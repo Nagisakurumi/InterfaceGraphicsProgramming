@@ -57,6 +57,7 @@ namespace TKScriptsServer.API
             try
             {
                 requestMsg = ScriptServer.GetRequestMessage(request);
+                Log.Write("收到接口请求 : ", requestMsg.ApiName);
                 if (requestMsg.ApiName.Equals(GetAllAPIUrlAPIName))
                 {
                     updateAPIsRequest?.Invoke();

@@ -95,17 +95,28 @@ namespace TKScriptsServer
                     //等待请求，阻塞
                     var context = httpListener.GetContext();
                     //new Thread(ctext => {
-                        lock (watchLock)
+                    lock (watchLock)
+                    {
+                        //HttpListenerContext httpListenerContext = ctext as HttpListenerContext;
+                        HttpListenerContext httpListenerContext = context;
+                        //取得请求的对象
+                        HttpListenerRequest request = httpListenerContext.Request;
+                        //string message = getRequestMessage(request);
+                        // 取得回应对象
+                        HttpListenerResponse response = httpListenerContext.Response;
+                        try
                         {
-                            //HttpListenerContext httpListenerContext = ctext as HttpListenerContext;
-                            HttpListenerContext httpListenerContext = context;
-                            //取得请求的对象
-                            HttpListenerRequest request = httpListenerContext.Request;
-                            //string message = getRequestMessage(request);
-                            // 取得回应对象
-                            HttpListenerResponse response = httpListenerContext.Response;
                             RequestCallBack(request, response);
                         }
+                        catch (Exception ex)
+                        {
+                            Log.Write("服务器执行脚本错误 : ", ex);
+                        }
+                        finally
+                        {
+                            //response.Close();
+                        }
+                    }
                 }
                 //    })
                 //    { IsBackground = true, }.Start(context);
